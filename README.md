@@ -60,7 +60,7 @@ For more information on using the Angular CLI, including detailed command refere
 
 ## Running locally
 
-For end-to-end (e2e) testing, run:
+For running the code locally, run:
 
 ```bash
 ng s -o
