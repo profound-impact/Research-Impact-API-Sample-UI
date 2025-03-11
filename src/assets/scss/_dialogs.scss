@@ -1,0 +1,39 @@
+.smModal > .modal-dialog {
+    max-width: 300px !important;
+    min-width: 300px !important;
+    width: 50% !important;
+    height: 350px !important;
+    max-height: 350px !important;
+    min-height: 350px !important;
+}
+
+//Image editor
+@media screen and (max-width: 500px) /* Mobile */ {
+  ::ng-deep .image-preview-dialog {
+    mat-dialog-container {
+      width: auto;
+      padding: 14px;
+    }
+  }
+}
+
+//Profile
+.profile-modal {
+  height: 683px !important;
+  border-radius: 5px;
+}
+
+.mobile-profile-modal {
+  height: 1100px !important;
+  // height: 1230px !important;
+  border-radius: 5px;
+  padding: 0px !important;
+}
+
+
+.mobile-profile-close {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  // transform: translate(0px 25px) !important;
+}

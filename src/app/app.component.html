@@ -1,0 +1,2901 @@
+<!-- Static Topbar -->
+<nav class="topbar fixed-top">
+  <div class="topbar-container">
+    <div class="logo">
+      <img src="../assets/images/profoundLogo.png" alt="Research Impact" />
+    </div>
+    <div class="topbar-right">
+      <div class="user-profile">
+        <!-- <span class="user-name">Welcome</span> -->
+        <i class="fas fa-user-circle"></i>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Container with Sidebar -->
+<div class="main-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <ul class="nav-menu">
+      <!-- Level 1: Top categories -->
+      <li class="nav-item has-submenu" *ngFor="let category of menuItems">
+        <a href="#" class="nav-link" (click)="$event.preventDefault()">
+          <i class="fas fa-book"></i>
+          <span>{{ category.title }}</span>
+          <i class="fas fa-chevron-down submenu-arrow"></i>
+        </a>
+
+        <!-- Level 2: Items under each category -->
+        <ul class="submenu" [ngClass]="{ show: category.open }">
+          <li class="has-submenu" *ngFor="let item of category.items">
+            <a href="#" (click)="$event.preventDefault()">
+              <span>{{ item.title }}</span>
+              <i class="fas fa-chevron-down submenu-arrow"></i>
+            </a>
+
+            <!-- Level 3: Subitems -->
+            <ul class="submenu">
+              <li *ngFor="let subitem of item.subitems">
+                <a
+                  href="#"
+                  (click)="
+                    anchorSection({ title: subitem }); $event.preventDefault()
+                  "
+                >
+                  <span>{{ subitem }}</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="content">
+    <div id="search-grants">
+      <!-- Add the descriptive information here -->
+      <div
+        class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+      >
+        <h2 class="text-xl font-semibold mb-2">Search grants</h2>
+        <p class="text-gray-700 mb-2">
+          Retrieves detailed information about grants using filters as
+          parameters. The search parameters can be multiple.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>Endpoint: <span class="font-mono">POST /grant/search</span></p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/grant/search"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/grant/search</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <div class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <form
+          [formGroup]="searchForm"
+          class="space-y-6"
+          (ngSubmit)="searchForGrants()"
+        >
+          <!-- First row -->
+          <div>use semicolon (;) to enter multiple search phrases</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label
+                for="titles"
+                class="block text-sm font-medium text-gray-700"
+                >Titles:
+              </label>
+              <input
+                type="text"
+                id="titles"
+                formControlName="titles"
+                placeholder="Enter grant titles"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div class="space-y-2">
+              <label
+                for="sources"
+                class="block text-sm font-medium text-gray-700"
+                >Sources:</label
+              >
+              <input
+                type="text"
+                id="sources"
+                formControlName="sources"
+                placeholder="Enter funding sources"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Second row -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label
+                for="deadlineRangeStart"
+                class="block text-sm font-medium text-gray-700"
+                >Deadline start:</label
+              >
+              <input
+                type="date"
+                id="deadlineRangeStart"
+                formControlName="deadlineRangeStart"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div class="space-y-2">
+              <label
+                for="deadlineRangeEnd"
+                class="block text-sm font-medium text-gray-700"
+                >Deadline end:</label
+              >
+              <input
+                type="date"
+                id="deadlineRangeEnd"
+                formControlName="deadlineRangeEnd"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Third row -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label
+                for="keywords"
+                class="block text-sm font-medium text-gray-700"
+                >Keywords:</label
+              >
+              <input
+                type="text"
+                id="keywords"
+                formControlName="keywords"
+                placeholder="Enter relevant keywords"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div class="space-y-2">
+              <label
+                for="areaOfResearches"
+                class="block text-sm font-medium text-gray-700"
+                >Area of research:</label
+              >
+              <input
+                type="text"
+                id="areaOfResearches"
+                formControlName="areaOfResearches"
+                placeholder="Enter area of research"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Fourth row -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label
+                for="disciplines"
+                class="block text-sm font-medium text-gray-700"
+                >Disciplines:</label
+              >
+              <input
+                type="text"
+                id="disciplines"
+                formControlName="disciplines"
+                placeholder="Enter disciplines"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div class="space-y-2">
+              <label
+                for="countries"
+                class="block text-sm font-medium text-gray-700"
+                >Countries:</label
+              >
+              <input
+                type="text"
+                id="countries"
+                formControlName="countries"
+                placeholder="Enter eligible countries"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Submit button with loading state -->
+          <div class="flex justify-center gap-4">
+            <button
+              type="submit"
+              [disabled]="isLoading() || !formIsValid()"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            >
+              <span *ngIf="isLoading()">
+                <svg
+                  class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Searching...
+              </span>
+              <span *ngIf="!isLoading()">Filter Grants</span>
+            </button>
+            <button
+              type="button"
+              (click)="resetForm()"
+              class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Grant List Table -->
+      <div class="max-w-9xl mx-auto mt-8">
+        <h2 class="text-xl font-semibold mb-4">Search grant results</h2>
+
+        <!-- Show loading spinner while fetching results -->
+        <div *ngIf="isLoading()" class="flex justify-center py-8">
+          <svg
+            class="animate-spin h-10 w-10 text-indigo-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+        </div>
+
+        <!-- Desktop Table View (hidden on small screens) -->
+        <div
+          *ngIf="!isLoading() && grants().length > 0"
+          class="hidden md:block overflow-x-auto rounded-lg border border-gray-200 shadow-md"
+        >
+          <table
+            class="min-w-full divide-y divide-gray-200 table-fixed w-full max-w-full"
+          >
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  class="w-16 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  ID
+                </th>
+                <th
+                  scope="col"
+                  class="w-1/3 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Title
+                </th>
+                <th
+                  scope="col"
+                  class="w-1/6 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell hidden"
+                >
+                  Source
+                </th>
+                <th
+                  scope="col"
+                  class="w-20 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  class="w-24 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell hidden"
+                >
+                  Budget
+                </th>
+                <th
+                  scope="col"
+                  class="w-32 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider xl:table-cell hidden"
+                >
+                  Deadline
+                </th>
+                <th
+                  scope="col"
+                  class="w-16 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let grant of grants()" class="hover:bg-gray-50">
+                <td class="px-2 sm:px-4 py-2 text-sm font-medium text-gray-900">
+                  {{ grant.id }}
+                </td>
+                <td class="px-2 sm:px-4 py-3 text-sm text-gray-900">
+                  <div class="line-clamp-5" [title]="grant.title">
+                    {{ grant.title }}
+                  </div>
+                </td>
+
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 lg:table-cell hidden"
+                >
+                  <div class="truncate" [title]="grant.source">
+                    {{ grant.source }}
+                  </div>
+                </td>
+                <td class="px-2 sm:px-4 py-2 text-sm">
+                  <span
+                    [ngClass]="{
+                      'px-2 py-0.5 text-xs font-semibold rounded-full': true,
+                      'bg-green-100 text-green-800': grant.status === 'Open',
+                      'bg-red-100 text-red-800': grant.status === 'Closed',
+                      'bg-yellow-100 text-yellow-800':
+                        grant.status !== 'Open' && grant.status !== 'Closed'
+                    }"
+                  >
+                    {{ grant.status }}
+                  </span>
+                </td>
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 lg:table-cell hidden"
+                >
+                  {{ grant.budget }}
+                </td>
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 xl:table-cell hidden"
+                >
+                  <div class="space-y-0.5">
+                    <div class="truncate text-xs">
+                      <span class="font-medium">Type:</span>
+                      {{ grant.deadlineType }}
+                    </div>
+                    <div class="truncate text-xs">
+                      <span class="font-medium">Intake:</span>
+                      {{ grant.deadlineIntake }}
+                    </div>
+                  </div>
+                </td>
+                <td class="px-2 sm:px-4 py-2 text-sm">
+                  <div class="flex space-x-1">
+                    <a
+                      *ngIf="grant.websiteLink"
+                      [href]="grant.websiteLink"
+                      target="_blank"
+                      class="text-indigo-600 hover:text-indigo-900"
+                    >
+                      <span class="sr-only">Website</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div
+          *ngIf="!isLoading() && grants().length > 0"
+          class="md:hidden space-y-4"
+        >
+          <div
+            *ngFor="let grant of grants()"
+            class="bg-white rounded-lg shadow border border-gray-200 p-4"
+          >
+            <div class="flex justify-between items-start">
+              <h3 class="font-medium text-gray-900">{{ grant.title }}</h3>
+              <span
+                [ngClass]="{
+                  'px-2 py-1 text-xs font-semibold rounded-full': true,
+                  'bg-green-100 text-green-800': grant.status === 'Open',
+                  'bg-red-100 text-red-800': grant.status === 'Closed',
+                  'bg-yellow-100 text-yellow-800':
+                    grant.status !== 'Open' && grant.status !== 'Closed'
+                }"
+              >
+                {{ grant.status }}
+              </span>
+            </div>
+
+            <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
+              <div>
+                <span class="text-gray-500">ID:</span>
+                <span class="font-medium ml-1">{{ grant.id }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Budget:</span>
+                <span class="font-medium ml-1">{{ grant.budget }}</span>
+              </div>
+              <div class="col-span-2">
+                <span class="text-gray-500">Source:</span>
+                <span class="font-medium ml-1">{{ grant.source }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Deadline Type:</span>
+                <span class="font-medium ml-1">{{ grant.deadlineType }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Intake:</span>
+                <span class="font-medium ml-1">{{ grant.deadlineIntake }}</span>
+              </div>
+            </div>
+
+            <div class="mt-3 pt-3 border-t border-gray-100 flex justify-end">
+              <a
+                *ngIf="grant.websiteLink"
+                [href]="grant.websiteLink"
+                target="_blank"
+                class="text-indigo-600 hover:text-indigo-900 flex items-center text-sm"
+              >
+                Visit website
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 ml-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty state if no grants -->
+        <div
+          *ngIf="!isLoading() && grants().length === 0"
+          class="bg-white rounded-lg shadow-md border border-gray-200 p-6"
+        >
+          <div class="flex flex-col items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 text-gray-400 mb-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p class="text-center text-gray-500">
+              No grants found matching your filters.
+            </p>
+            <p class="mt-1 text-center text-gray-500">
+              Try adjusting your search criteria.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Add this section within your content div -->
+    <div id="get-a-single-grant" class="max-w-9xl mx-auto mb-8 mt-8">
+      <div class="bg-gray-50 rounded-lg border border-gray-200 p-4 mb-4">
+        <h2 class="text-xl font-semibold mb-2">Get a single grant</h2>
+        <p class="text-gray-700 mb-2">
+          Retrieves detailed information about a specific grant using its unique
+          identifier.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>
+            Endpoint: <span class="font-mono">GET /grant/{{'{{id}}'}}</span>
+          </p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/grant/5249"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/grant/5249</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Input for grant ID and fetch button -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex items-end space-x-4">
+          <div class="flex-grow">
+            <label
+              for="grantId"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Grant ID:</label
+            >
+            <input
+              type="number"
+              id="grantId"
+              #grantIdInput
+              placeholder="Enter grant ID"
+              class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          <button
+            (click)="getSingleGrant(grantIdInput.value)"
+            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            <span *ngIf="!singleGrantLoading()">Fetch Grant</span>
+            <span *ngIf="singleGrantLoading()" class="flex items-center">
+              <svg
+                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Loading...
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Error message -->
+      <div
+        *ngIf="singleGrantError()"
+        class="bg-red-50 border-l-4 border-red-500 p-4 mb-6"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-red-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700">{{ singleGrantError() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grant details display -->
+      <div
+        *ngIf="singleGrant() && !singleGrantLoading()"
+        class="bg-white shadow overflow-hidden sm:rounded-lg mb-8"
+      >
+        <!-- Header -->
+        <div
+          class="px-4 py-5 sm:px-6 bg-indigo-50 flex justify-between items-center"
+        >
+          <div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+              Grant #{{ singleGrant().basic.id }}
+            </h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              Created: {{ singleGrant().basic.createdDateTime }}
+            </p>
+          </div>
+          <span
+            [ngClass]="{
+              'px-3 py-1 text-sm font-semibold rounded-full': true,
+              'bg-green-100 text-green-800':
+                singleGrant().basic.status === 'Open',
+              'bg-red-100 text-red-800':
+                singleGrant().basic.status === 'Closed',
+              'bg-yellow-100 text-yellow-800':
+                singleGrant().basic.status !== 'Open' &&
+                singleGrant().basic.status !== 'Closed'
+            }"
+          >
+            {{ singleGrant().basic.status }}
+          </span>
+        </div>
+
+        <!-- Basic Information -->
+        <div class="border-t border-gray-200">
+          <dl>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Title</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleGrant().basic.title }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Source</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleGrant().basic.source }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Website</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <a
+                  *ngIf="singleGrant().basic.websiteLink"
+                  [href]="singleGrant().basic.websiteLink"
+                  target="_blank"
+                  class="text-indigo-600 hover:text-indigo-900"
+                >
+                  {{ singleGrant().basic.websiteLink }}
+                </a>
+                <span *ngIf="!singleGrant().basic.websiteLink"
+                  >Not available</span
+                >
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Summary</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleGrant().basic.summary }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">PDF File</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleGrant().basic.pdfFileName || "No PDF file available" }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Areas of Research -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Areas of Research
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <!-- AOR Divisions -->
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">AOR Divisions</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    *ngFor="let division of singleGrant().basic.aorDivisions"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                  >
+                    {{ division }}
+                  </span>
+                </div>
+              </dd>
+            </div>
+
+            <!-- AOR Groups -->
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">AOR Groups</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    *ngFor="let group of singleGrant().basic.aorGroups"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                  >
+                    {{ group }}
+                  </span>
+                </div>
+              </dd>
+            </div>
+
+            <!-- AOR Details -->
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">AOR Details</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div
+                  *ngFor="let detail of singleGrant().basic.aorDetails"
+                  class="mb-4 p-3 border border-gray-200 rounded-md"
+                >
+                  <p class="font-medium text-indigo-600">{{ detail.a }}</p>
+                  <p class="text-xs text-gray-500 mt-1">Date: {{ detail.t }}</p>
+                  <div class="mt-2 text-sm">
+                    <p>
+                      <span class="font-medium">AI Context:</span>
+                      {{ detail.ai_c }}
+                    </p>
+                    <p class="mt-1">
+                      <span class="font-medium">AI Reasoning:</span>
+                      {{ detail.ai_r }}
+                    </p>
+                    <p class="mt-1">
+                      <span class="font-medium">AI Score:</span>
+                      {{ detail.ai_s }}/10
+                    </p>
+                  </div>
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Dates -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Deadlines & Dates
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Deadline Info</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="flex space-x-6">
+                  <div>
+                    <span class="font-medium">Type:</span>
+                    {{ singleGrant().dates.deadlineType }}
+                  </div>
+                  <div>
+                    <span class="font-medium">Intake:</span>
+                    {{ singleGrant().dates.deadlineIntake }}
+                  </div>
+                  <div>
+                    <span class="font-medium">Stage:</span>
+                    {{ singleGrant().dates.deadlineStage }}
+                  </div>
+                </div>
+              </dd>
+            </div>
+
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">
+                Application Deadlines
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="space-y-3">
+                  <div
+                    *ngFor="
+                      let deadline of singleGrant().dates.applicationDeadlines;
+                      let i = index
+                    "
+                    class="p-3 border border-gray-200 rounded-md"
+                  >
+                    <div class="font-medium">Deadline Set {{ i + 1 }}</div>
+                    <div class="mt-2 grid grid-cols-2 gap-4">
+                      <div>
+                        <span class="text-gray-500">Application Deadline:</span>
+                        <div class="font-medium">
+                          {{ deadline.applicationDeadline }}
+                        </div>
+                      </div>
+                      <div>
+                        <span class="text-gray-500"
+                          >Registration of Intent:</span
+                        >
+                        <div class="font-medium">
+                          {{ deadline.registrationOfIntentDeadline }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Funds Information -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Funding Information
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Budget Details</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="flex space-x-6">
+                  <div>
+                    <span class="font-medium">Budget:</span>
+                    {{
+                      singleGrant().funds.budget > 0
+                        ? (singleGrant().funds.budget
+                          | currency : singleGrant().funds.currencyCode)
+                        : "Not specified"
+                    }}
+                  </div>
+                  <div>
+                    <span class="font-medium">Award Amount:</span>
+                    {{
+                      singleGrant().funds.awardAmount > 0
+                        ? (singleGrant().funds.awardAmount
+                          | currency : singleGrant().funds.currencyCode)
+                        : "Not specified"
+                    }}
+                  </div>
+                  <div>
+                    <span class="font-medium">Currency:</span>
+                    {{ singleGrant().funds.currencyCode }}
+                  </div>
+                </div>
+              </dd>
+            </div>
+
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">
+                Budget Description
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <p class="whitespace-pre-line">
+                  {{ singleGrant().funds.budgetDescription }}
+                </p>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Keywords -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Keywords</h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+          <div class="flex flex-wrap gap-2">
+            <span
+              *ngFor="let keyword of singleGrant().keywords"
+              class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800"
+            >
+              {{ keyword }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Eligibility Information -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Eligibility Criteria
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <!-- Countries -->
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">
+                Eligible Countries
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    *ngFor="
+                      let country of singleGrant().eligibilities.countries
+                    "
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                  >
+                    {{ country }}
+                  </span>
+                </div>
+              </dd>
+            </div>
+
+            <!-- Provinces -->
+            <div
+              *ngIf="singleGrant().eligibilities.provinces?.length"
+              class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">
+                Eligible Provinces
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    *ngFor="
+                      let province of singleGrant().eligibilities.provinces
+                    "
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                  >
+                    {{ province }}
+                  </span>
+                </div>
+              </dd>
+            </div>
+
+            <!-- Career Stages -->
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Career Stages</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    *ngFor="
+                      let stage of singleGrant().eligibilities.careerStages
+                    "
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
+                  >
+                    {{ stage }}
+                  </span>
+                </div>
+              </dd>
+            </div>
+
+            <!-- General Eligibility -->
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">
+                General Eligibility
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <ul class="list-disc pl-5 space-y-1">
+                  <li *ngFor="let item of singleGrant().eligibilities.general">
+                    {{ item }}
+                  </li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!-- Add grant by parameters section -->
+    <div id="add-grant-by-parameters" class="max-w-9xl mx-auto mb-8 mt-8">
+      <!-- Descriptive Information -->
+      <div
+        class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+      >
+        <h2 class="text-xl font-semibold mb-2">Add grant by parameters</h2>
+        <p class="text-gray-700 mb-2">
+          Adds a new grant to the system by providing structured parameters
+          including triggering the AI stack and Area of Research(AOR)
+          attachment.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>Endpoint: <span class="font-mono">POST /grant</span></p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/grant"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/grant</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Form Container -->
+      <div class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <form
+          [formGroup]="addGrantForm"
+          class="space-y-6"
+          (ngSubmit)="addGrantByParameters()"
+        >
+          <!-- Basic Information -->
+          <div class="mb-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Basic Information
+            </h3>
+
+            <!-- First row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label
+                  for="title"
+                  class="block text-sm font-medium text-gray-700"
+                  >Title *</label
+                >
+                <input
+                  type="text"
+                  id="title"
+                  formControlName="title"
+                  placeholder="Enter grant title"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="source"
+                  class="block text-sm font-medium text-gray-700"
+                  >Source *</label
+                >
+                <input
+                  type="text"
+                  id="source"
+                  formControlName="source"
+                  placeholder="Enter funding source"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Second row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              <div class="space-y-2">
+                <label
+                  for="websiteLink"
+                  class="block text-sm font-medium text-gray-700"
+                  >Website Link</label
+                >
+                <input
+                  type="text"
+                  id="websiteLink"
+                  formControlName="websiteLink"
+                  placeholder="Enter website URL"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="deadlineType"
+                  class="block text-sm font-medium text-gray-700"
+                  >Deadline Type *</label
+                >
+                <select
+                  id="deadlineType"
+                  formControlName="deadlineType"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="Regular">Regular</option>
+                  <option value="Annual">Annual</option>
+                  <option value="Continuous">Continuous</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="mt-4 space-y-2">
+              <label
+                for="summary"
+                class="block text-sm font-medium text-gray-700"
+                >Summary *</label
+              >
+              <textarea
+                id="summary"
+                formControlName="summary"
+                placeholder="Enter grant summary"
+                rows="3"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              ></textarea>
+            </div>
+
+            <!-- Public/Private toggle -->
+            <div class="mt-4">
+              <label class="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  formControlName="public"
+                  class="form-checkbox h-4 w-4 text-indigo-600"
+                />
+                <span class="ml-2 text-sm text-gray-700"
+                  >Make grant public</span
+                >
+              </label>
+            </div>
+          </div>
+
+          <!-- Application Deadlines -->
+          <div
+            *ngIf="addGrantForm.get('deadlineType')?.value !== 'Continuous'"
+            class="border-t border-gray-200 pt-4"
+          >
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-900">
+                Application Deadlines
+              </h3>
+              <button
+                type="button"
+                (click)="addDeadline()"
+                class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <svg
+                  class="h-4 w-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+                Add Deadline
+              </button>
+            </div>
+
+            <div formArrayName="applicationDeadlines" class="space-y-4">
+              <div
+                *ngFor="
+                  let deadline of applicationDeadlinesArray.controls;
+                  let i = index
+                "
+                [formGroupName]="i"
+                class="p-4 border border-gray-200 rounded-md"
+              >
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-medium">Deadline Set #{{ i + 1 }}</span>
+                  <button
+                    *ngIf="applicationDeadlinesArray.length > 1"
+                    type="button"
+                    (click)="removeDeadline(i)"
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Application Deadline *</label
+                    >
+                    <input
+                      type="date"
+                      formControlName="applicationDeadline"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Registration of Intent Deadline</label
+                    >
+                    <input
+                      type="date"
+                      formControlName="registrationOfIntentDeadline"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Budget Information -->
+          <div class="border-t border-gray-200 pt-4">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Budget Information
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Budget</label
+                >
+                <input
+                  type="number"
+                  formControlName="budget"
+                  placeholder="Enter budget amount"
+                  min="0"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Award Amount</label
+                >
+                <input
+                  type="number"
+                  formControlName="awardAmount"
+                  placeholder="Enter award amount"
+                  min="0"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Currency</label
+                >
+                <select
+                  formControlName="currencyCode"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="USD">USD</option>
+                  <option value="CAD">CAD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-4 space-y-2">
+              <label class="block text-sm font-medium text-gray-700"
+                >Budget Description</label
+              >
+              <textarea
+                formControlName="budgetDescription"
+                placeholder="Enter budget description"
+                rows="2"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Keywords -->
+          <div class="border-t border-gray-200 pt-4">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-900">Keywords</h3>
+              <button
+                type="button"
+                (click)="addItemToArray('keywords')"
+                class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <svg
+                  class="h-4 w-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+                Add Keyword
+              </button>
+            </div>
+
+            <div formArrayName="keywords" class="space-y-2">
+              <div
+                *ngFor="let keyword of keywordsArray.controls; let i = index"
+                class="flex space-x-2"
+              >
+                <input
+                  [formControlName]="i"
+                  placeholder="Enter keyword"
+                  class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <button
+                  *ngIf="keywordsArray.length > 1"
+                  type="button"
+                  (click)="removeItemFromArray('keywords', i)"
+                  class="text-red-600 hover:text-red-800"
+                >
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Eligibility Criteria -->
+          <div class="border-t border-gray-200 pt-4">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Eligibility Criteria
+            </h3>
+
+            <!-- Countries -->
+            <div class="mb-4">
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Eligible Countries</label
+                >
+                <button
+                  type="button"
+                  (click)="addItemToArray('eligibility_criteria_countries')"
+                  class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <svg
+                    class="h-4 w-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    ></path>
+                  </svg>
+                  Add Country
+                </button>
+              </div>
+
+              <div
+                formArrayName="eligibility_criteria_countries"
+                class="space-y-2"
+              >
+                <div
+                  *ngFor="let country of countriesArray.controls; let i = index"
+                  class="flex space-x-2"
+                >
+                  <input
+                    [formControlName]="i"
+                    placeholder="Enter country name"
+                    class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  <button
+                    *ngIf="countriesArray.length > 1"
+                    type="button"
+                    (click)="
+                      removeItemFromArray('eligibility_criteria_countries', i)
+                    "
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Provinces -->
+            <div class="mb-4">
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Eligible Provinces</label
+                >
+                <button
+                  type="button"
+                  (click)="addItemToArray('eligibility_criteria_provinces')"
+                  class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <svg
+                    class="h-4 w-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    ></path>
+                  </svg>
+                  Add Province
+                </button>
+              </div>
+
+              <div
+                formArrayName="eligibility_criteria_provinces"
+                class="space-y-2"
+              >
+                <div
+                  *ngFor="
+                    let province of provincesArray.controls;
+                    let i = index
+                  "
+                  class="flex space-x-2"
+                >
+                  <input
+                    [formControlName]="i"
+                    placeholder="Enter province name"
+                    class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  <button
+                    *ngIf="provincesArray.length > 1"
+                    type="button"
+                    (click)="
+                      removeItemFromArray('eligibility_criteria_provinces', i)
+                    "
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Career Stages -->
+            <div class="mb-4">
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Career Stages</label
+                >
+                <button
+                  type="button"
+                  (click)="addItemToArray('eligibility_criteria_careerStages')"
+                  class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <svg
+                    class="h-4 w-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    ></path>
+                  </svg>
+                  Add Career Stage
+                </button>
+              </div>
+
+              <div
+                formArrayName="eligibility_criteria_careerStages"
+                class="space-y-2"
+              >
+                <div
+                  *ngFor="
+                    let stage of careerStagesArray.controls;
+                    let i = index
+                  "
+                  class="flex space-x-2"
+                >
+                  <select
+                    [formControlName]="i"
+                    class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    <option value="">Select career stage</option>
+                    <option
+                      *ngFor="let stage of getUnusedCareerStages(i)"
+                      [value]="stage"
+                    >
+                      {{ stage }}
+                    </option>
+                  </select>
+                  <button
+                    *ngIf="careerStagesArray.length > 1"
+                    type="button"
+                    (click)="
+                      removeItemFromArray(
+                        'eligibility_criteria_careerStages',
+                        i
+                      )
+                    "
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- General Eligibility -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >General Eligibility Criteria</label
+                >
+                <button
+                  type="button"
+                  (click)="addItemToArray('eligibility_criteria_general')"
+                  class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <svg
+                    class="h-4 w-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    ></path>
+                  </svg>
+                  Add Criterion
+                </button>
+              </div>
+
+              <div
+                formArrayName="eligibility_criteria_general"
+                class="space-y-2"
+              >
+                <div
+                  *ngFor="
+                    let criterion of generalEligibilityArray.controls;
+                    let i = index
+                  "
+                  class="flex space-x-2"
+                >
+                  <input
+                    [formControlName]="i"
+                    placeholder="Enter eligibility criterion"
+                    class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  <button
+                    *ngIf="generalEligibilityArray.length > 1"
+                    type="button"
+                    (click)="
+                      removeItemFromArray('eligibility_criteria_general', i)
+                    "
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit buttons -->
+          <div class="flex justify-center gap-4 pt-4">
+            <button
+              type="submit"
+              [disabled]="addGrantLoading() || addGrantForm.invalid"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            >
+              <span *ngIf="addGrantLoading()">
+                <svg
+                  class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Adding Grant...
+              </span>
+              <span *ngIf="!addGrantLoading()">Add Grant</span>
+            </button>
+            <button
+              type="button"
+              (click)="resetAddGrantForm()"
+              class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Reset Form
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Error message -->
+      <div
+        *ngIf="addGrantError()"
+        class="bg-red-50 border-l-4 border-red-500 p-4 mb-6"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-red-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700">{{ addGrantError() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Success message -->
+      <div
+        *ngIf="addGrantSuccess()"
+        class="bg-green-50 border-l-4 border-green-500 p-4 mb-6"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-green-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-green-700">
+              Grant added successfully! ID: {{ addGrantSuccess().id }}
+              <span class="block mt-1 text-amber-600">
+                <i class="fas fa-info-circle mr-1"></i>
+                Note: AI processing is still running and will continue for
+                approximately 10 minutes. You can check the grant details after
+                processing is complete.
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result display -->
+      <div
+        *ngIf="addGrantSuccess()"
+        class="bg-white shadow overflow-hidden sm:rounded-lg mb-8"
+      >
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Added Grant Details
+          </h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            Initial information. Area of Research data will be attached after AI
+            processing completes.
+          </p>
+        </div>
+
+        <div class="border-t border-gray-200">
+          <dl>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Grant ID</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ addGrantSuccess().grantId }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Title</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ addGrantSuccess().title }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Source</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ addGrantSuccess().source }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Created Date</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ addGrantSuccess().createdDateTime }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Status</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <span
+                  [ngClass]="{
+                    'px-2 py-1 text-xs font-semibold rounded-full': true,
+                    'bg-yellow-100 text-yellow-800':
+                      addGrantSuccess().status === 'Processing',
+                    'bg-green-100 text-green-800':
+                      addGrantSuccess().status === 'Open',
+                    'bg-red-100 text-red-800':
+                      addGrantSuccess().status === 'Closed'
+                  }"
+                >
+                  {{ addGrantSuccess().status || "Processing" }}
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Full JSON Response -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50 mt-4">
+          <h4 class="text-md leading-6 font-medium text-gray-900">
+            Full API Response
+          </h4>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+          <pre class="bg-gray-100 p-4 rounded overflow-auto text-sm">{{
+            addGrantSuccess() | json
+          }}</pre>
+        </div>
+      </div>
+    </div>
+    <!-- ! Get PDF Upload URL - Grant -->
+    <div id="add-grant-by-pdf" class="max-w-9xl mx-auto mb-8 mt-8">
+      <div
+        class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+      >
+        <h2 class="text-xl font-semibold mb-2">Add grant by PDF</h2>
+        <p class="text-gray-700 mb-2">
+          Adds a new grant to the system by providing structured parameters and
+          a PDF file including triggering the AI stack and Area of Research(AOR)
+          attachment. The PDF extraction and AI processing takes approximately
+          10 minutes to complete, during which the system retrieves and attaches
+          relevant grant information.
+        </p>
+        <p class="text-gray-700 mb-2">
+          Adding a grant by PDF includes 2 steps.
+        </p>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">
+          Step 1: Get PDF upload URL and file Id
+        </h3>
+        <p class="text-gray-700 mb-2">
+          Retrieves a temporary URL and file ID to upload the PDF file
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>
+            Endpoint: <span class="font-mono">GET /uploadURL/grant/pdf</span>
+          </p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/uploadURL/grant/pdf"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/uploadURL/grant/pdf</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive content -->
+      <div class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <button
+          (click)="getGrantPdfUploadUrl(); setPdfFileNameWhenReceived()"
+          [disabled]="uploadUrlLoading()"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+        >
+          <span *ngIf="!uploadUrlLoading()">Get Upload URL</span>
+          <span *ngIf="uploadUrlLoading()" class="flex items-center">
+            <svg
+              class="animate-spin -ml-1 mr-2 h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Getting URL...
+          </span>
+        </button>
+
+        <!-- Display the URL when available -->
+        <div *ngIf="uploadUrlResponse()" class="mt-4 p-4 bg-gray-50 rounded">
+          <div class="mb-2">
+            <p class="text-sm font-medium text-gray-900">Upload URL:</p>
+            <p class="mt-1 text-sm text-gray-500 break-all">
+              {{ uploadUrlResponse()?.url }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-900">File ID:</p>
+            <p class="mt-1 text-sm text-gray-500">
+              {{ uploadUrlResponse()?.fileId }}
+            </p>
+          </div>
+          <div class="mt-4">
+            <p class="text-sm text-gray-600">
+              1. Use this URL to upload your PDF file via a PUT request.<br />
+              2. After uploading, proceed to Step 2 below to add the grant.
+            </p>
+          </div>
+        </div>
+
+        <!-- Display error if any -->
+        <div
+          *ngIf="uploadUrlError()"
+          class="mt-4 p-4 bg-red-50 text-red-700 rounded"
+        >
+          {{ uploadUrlError() }}
+        </div>
+      </div>
+
+      <!-- Step 2 Description -->
+      <div
+        *ngIf="uploadUrlResponse()"
+        class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200 mt-8"
+      >
+        <h3 class="text-lg font-medium text-gray-900 mb-2">
+          Step 2: Add grant by PDF file ID
+        </h3>
+        <p class="text-gray-700 mb-2">
+          After successfully uploading the PDF file, use the returned file ID to
+          add a new grant to the system.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>Endpoint: <span class="font-mono">POST /grant/pdf</span></p>
+          <p>
+            Endpoint example:
+            <a
+              href="https://api.research.profoundimpact.com/v1/grant/pdf"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/grant/pdf</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Form Container -->
+      <div
+        *ngIf="uploadUrlResponse()"
+        class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md"
+      >
+        <form
+          [formGroup]="addGrantPdfForm"
+          (ngSubmit)="addGrantByPdf()"
+          class="space-y-6"
+        >
+          <!-- Basic Information -->
+          <div class="mb-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Basic Information
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label
+                  for="title"
+                  class="block text-sm font-medium text-gray-700"
+                  >Title *</label
+                >
+                <input
+                  type="text"
+                  id="title"
+                  formControlName="title"
+                  placeholder="Enter grant title"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="source"
+                  class="block text-sm font-medium text-gray-700"
+                  >Source *</label
+                >
+                <input
+                  type="text"
+                  id="source"
+                  formControlName="source"
+                  placeholder="Enter funding source"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+              <div class="space-y-2">
+                <label
+                  for="websiteLink"
+                  class="block text-sm font-medium text-gray-700"
+                  >Website Link</label
+                >
+                <input
+                  type="text"
+                  id="websiteLink"
+                  formControlName="websiteLink"
+                  placeholder="Enter website URL"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="pdfFileName"
+                  class="block text-sm font-medium text-gray-700"
+                  >PDF File Name</label
+                >
+                <input
+                  type="text"
+                  id="pdfFileName"
+                  formControlName="pdfFileName"
+                  placeholder="Enter PDF file name"
+                  readonly
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="deadlineType"
+                  class="block text-sm font-medium text-gray-700"
+                  >Deadline Type</label
+                >
+                <select
+                  id="deadlineType"
+                  formControlName="deadlineType"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="Regular">Regular</option>
+                  <option value="Annual">Annual</option>
+                  <option value="Continuous">Continuous</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Public/Private toggle -->
+            <div class="mt-4">
+              <label class="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  formControlName="public"
+                  class="form-checkbox h-4 w-4 text-indigo-600"
+                />
+                <span class="ml-2 text-sm text-gray-700"
+                  >Make grant public</span
+                >
+              </label>
+            </div>
+          </div>
+
+          <!-- Deadline Information -->
+          <div
+            class="border-t border-gray-200 pt-4"
+            *ngIf="addGrantPdfForm.get('deadlineType')?.value !== 'Continuous'"
+          >
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-900">
+                Application Deadlines
+              </h3>
+              <button
+                type="button"
+                (click)="addDeadlinePdf()"
+                class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200"
+              >
+                <svg
+                  class="h-4 w-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                Add Deadline
+              </button>
+            </div>
+
+            <div formArrayName="applicationDeadlines" class="space-y-4">
+              <div
+                *ngFor="
+                  let deadline of getFormArrayByKey('applicationDeadlines')
+                    .controls;
+                  let i = index
+                "
+                [formGroupName]="i"
+                class="p-4 border border-gray-200 rounded-md"
+              >
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-medium">Deadline Set #{{ i + 1 }}</span>
+                  <button
+                    *ngIf="getFormArrayByKey('applicationDeadlines').length > 1"
+                    type="button"
+                    (click)="removeDeadlinePdf(i)"
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Application Deadline *</label
+                    >
+                    <input
+                      type="date"
+                      formControlName="applicationDeadline"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Registration of Intent Deadline</label
+                    >
+                    <input
+                      type="date"
+                      formControlName="registrationOfIntentDeadline"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Eligibility Criteria -->
+          <div class="border-t border-gray-200 pt-4">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Eligibility Criteria
+            </h3>
+
+            <!-- Countries and Provinces -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Eligible Countries</label
+                >
+                <div formArrayName="eligibility_criteria_countries">
+                  <div
+                    *ngFor="
+                      let country of getFormArrayByKey(
+                        'eligibility_criteria_countries'
+                      ).controls;
+                      let i = index
+                    "
+                    class="flex space-x-2 mt-2"
+                  >
+                    <input
+                      [formControlName]="i"
+                      placeholder="Enter country"
+                      class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm"
+                    />
+                    <button
+                      type="button"
+                      *ngIf="
+                        getFormArrayByKey('eligibility_criteria_countries')
+                          .length > 1
+                      "
+                      (click)="
+                        removeItemFromPdfArray(
+                          'eligibility_criteria_countries',
+                          i
+                        )
+                      "
+                      class="text-red-600 hover:text-red-800"
+                    >
+                      <svg
+                        class="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    (click)="
+                      addItemToPdfArray('eligibility_criteria_countries')
+                    "
+                    class="mt-2 text-indigo-600 hover:text-indigo-800"
+                  >
+                    + Add Country
+                  </button>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Eligible Provinces</label
+                >
+                <div formArrayName="eligibility_criteria_provinces">
+                  <div
+                    *ngFor="
+                      let province of getFormArrayByKey(
+                        'eligibility_criteria_provinces'
+                      ).controls;
+                      let i = index
+                    "
+                    class="flex space-x-2 mt-2"
+                  >
+                    <input
+                      [formControlName]="i"
+                      placeholder="Enter province"
+                      class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm"
+                    />
+                    <button
+                      type="button"
+                      *ngIf="
+                        getFormArrayByKey('eligibility_criteria_provinces')
+                          .length > 1
+                      "
+                      (click)="
+                        removeItemFromPdfArray(
+                          'eligibility_criteria_provinces',
+                          i
+                        )
+                      "
+                      class="text-red-600 hover:text-red-800"
+                    >
+                      <svg
+                        class="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    (click)="
+                      addItemToPdfArray('eligibility_criteria_provinces')
+                    "
+                    class="mt-2 text-indigo-600 hover:text-indigo-800"
+                  >
+                    + Add Province
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Career Stages and General Eligibility -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Career Stages</label
+                >
+                <div formArrayName="eligibility_criteria_careerStages">
+                  <div
+                    *ngFor="
+                      let stage of getFormArrayByKey(
+                        'eligibility_criteria_careerStages'
+                      ).controls;
+                      let i = index
+                    "
+                    class="flex space-x-2 mt-2"
+                  >
+                    <select
+                      [formControlName]="i"
+                      class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm"
+                    >
+                      <option value="">Select career stage</option>
+                      <option
+                        *ngFor="let stage of getUnusedCareerStages(i)"
+                        [value]="stage"
+                      >
+                        {{ stage }}
+                      </option>
+                    </select>
+                    <button
+                      type="button"
+                      *ngIf="
+                        getFormArrayByKey('eligibility_criteria_careerStages')
+                          .length > 1
+                      "
+                      (click)="
+                        removeItemFromPdfArray(
+                          'eligibility_criteria_careerStages',
+                          i
+                        )
+                      "
+                      class="text-red-600 hover:text-red-800"
+                    >
+                      <svg
+                        class="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    (click)="
+                      addItemToPdfArray('eligibility_criteria_careerStages')
+                    "
+                    class="mt-2 text-indigo-600 hover:text-indigo-800"
+                  >
+                    + Add Career Stage
+                  </button>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >General Eligibility</label
+                >
+                <div formArrayName="eligibility_criteria_general">
+                  <div
+                    *ngFor="
+                      let criterion of getFormArrayByKey(
+                        'eligibility_criteria_general'
+                      ).controls;
+                      let i = index
+                    "
+                    class="flex space-x-2 mt-2"
+                  >
+                    <input
+                      [formControlName]="i"
+                      placeholder="Enter eligibility criterion"
+                      class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm"
+                    />
+                    <button
+                      type="button"
+                      *ngIf="
+                        getFormArrayByKey('eligibility_criteria_general')
+                          .length > 1
+                      "
+                      (click)="
+                        removeItemFromPdfArray(
+                          'eligibility_criteria_general',
+                          i
+                        )
+                      "
+                      class="text-red-600 hover:text-red-800"
+                    >
+                      <svg
+                        class="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    (click)="addItemToPdfArray('eligibility_criteria_general')"
+                    class="mt-2 text-indigo-600 hover:text-indigo-800"
+                  >
+                    + Add General Eligibility
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit buttons -->
+          <div class="flex justify-center gap-4 pt-4">
+            <button
+              type="submit"
+              [disabled]="addGrantPdfLoading() || addGrantPdfForm.invalid"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            >
+              <span *ngIf="addGrantPdfLoading()">
+                <svg
+                  class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Adding Grant...
+              </span>
+              <span *ngIf="!addGrantPdfLoading()">Add Grant with PDF</span>
+            </button>
+            <button
+              type="button"
+              (click)="resetAddGrantPdfForm()"
+              class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Reset Form
+            </button>
+          </div>
+        </form>
+
+        <!-- Error message -->
+        <div
+          *ngIf="addGrantPdfError()"
+          class="mt-4 p-4 bg-red-50 border-l-4 border-red-500"
+        >
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg
+                class="h-5 w-5 text-red-500"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-700">{{ addGrantPdfError() }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success message -->
+        <div
+          *ngIf="addGrantPdfSuccess()"
+          class="mt-4 p-4 bg-green-50 border-l-4 border-green-500"
+        >
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg
+                class="h-5 w-5 text-green-500"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-green-700">
+                Grant added successfully! ID: {{ addGrantPdfSuccess().id }}
+                <span class="block mt-1 text-amber-600">
+                  <i class="fas fa-info-circle mr-1"></i>
+                  Note: AI processing is still running and will continue for
+                  approximately 10 minutes. You can check the grant details
+                  after processing is complete.
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search researchers -->
+    <div id="search-researchers">
+      <!-- Add the descriptive information here -->
+      <div
+        class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+      >
+        <h2 class="text-xl font-semibold mb-2">Search researchers</h2>
+        <p class="text-gray-700 mb-2">
+          Retrieves detailed information about researchers using filters as
+          parameters. The search parameters can be multiple. Values in each
+          field use "OR" logic, except between keys, which use "AND" logic.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>
+            Endpoint: <span class="font-mono">POST /researcher/search</span>
+          </p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/researcher/search"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/researcher/search</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <div class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <form
+          [formGroup]="researcherSearchForm"
+          class="space-y-6"
+          (ngSubmit)="searchForResearchers()"
+        >
+          <!-- First row -->
+          <div>use semicolon (;) to enter multiple search phrases</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label for="names" class="block text-sm font-medium text-gray-700"
+                >Names:
+              </label>
+              <input
+                type="text"
+                id="names"
+                formControlName="names"
+                placeholder="Enter researcher names"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div class="space-y-2">
+              <label
+                for="faculties"
+                class="block text-sm font-medium text-gray-700"
+                >Faculties:</label
+              >
+              <input
+                type="text"
+                id="faculties"
+                formControlName="faculties"
+                placeholder="Enter faculties"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Second row -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label
+                for="keywords"
+                class="block text-sm font-medium text-gray-700"
+                >Keywords:</label
+              >
+              <input
+                type="text"
+                id="keywords"
+                formControlName="keywords"
+                placeholder="Enter keywords"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div class="space-y-2">
+              <label
+                for="areaOfResearches"
+                class="block text-sm font-medium text-gray-700"
+                >Area of research:</label
+              >
+              <input
+                type="text"
+                id="areaOfResearches"
+                formControlName="areaOfResearches"
+                placeholder="Enter area of research"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Third row -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label
+                for="disciplines"
+                class="block text-sm font-medium text-gray-700"
+                >Disciplines:</label
+              >
+              <input
+                type="text"
+                id="disciplines"
+                formControlName="disciplines"
+                placeholder="Enter disciplines"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Submit button with loading state -->
+          <div class="flex justify-center gap-4">
+            <button
+              type="submit"
+              [disabled]="researcherLoading()"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            >
+              <span *ngIf="researcherLoading()">
+                <svg
+                  class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Searching...
+              </span>
+              <span *ngIf="!researcherLoading()">Search Researchers</span>
+            </button>
+            <button
+              type="button"
+              (click)="resetResearcherForm()"
+              class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Researcher List Table -->
+      <div class="max-w-9xl mx-auto mt-8">
+        <h2 class="text-xl font-semibold mb-4">Search researcher results</h2>
+
+        <!-- Show loading spinner while fetching results -->
+        <div *ngIf="researcherLoading()" class="flex justify-center py-8">
+          <svg
+            class="animate-spin h-10 w-10 text-indigo-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+        </div>
+
+        <!-- Display error message if any -->
+        <div
+          *ngIf="researcherError()"
+          class="bg-red-50 border-l-4 border-red-500 p-4 mb-4"
+        >
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg
+                class="h-5 w-5 text-red-500"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-700">{{ researcherError() }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Table View (hidden on small screens) -->
+        <div
+          *ngIf="!researcherLoading() && researchers().length > 0"
+          class="hidden md:block overflow-x-auto rounded-lg border border-gray-200 shadow-md"
+        >
+          <table
+            class="min-w-full divide-y divide-gray-200 table-fixed w-full max-w-full"
+          >
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  class="w-16 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  ID
+                </th>
+                <th
+                  scope="col"
+                  class="w-1/4 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                  class="w-1/4 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Email
+                </th>
+                <th
+                  scope="col"
+                  class="w-1/6 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell hidden"
+                >
+                  Faculty
+                </th>
+                <th
+                  scope="col"
+                  class="w-1/6 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell hidden"
+                >
+                  Program
+                </th>
+                <th
+                  scope="col"
+                  class="w-1/6 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell hidden"
+                >
+                  Role
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr
+                *ngFor="let researcher of researchers()"
+                class="hover:bg-gray-50"
+              >
+                <td class="px-2 sm:px-4 py-2 text-sm font-medium text-gray-900">
+                  {{ researcher.id }}
+                </td>
+                <td class="px-2 sm:px-4 py-3 text-sm text-gray-900">
+                  <div class="flex items-center">
+                    <div>
+                      <div class="font-medium">
+                        {{ researcher.title ? researcher.title + " " : ""
+                        }}{{ researcher.firstName }} {{ researcher.lastName }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-2 sm:px-4 py-2 text-sm text-gray-500">
+                  {{ researcher.email }}
+                </td>
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 lg:table-cell hidden"
+                >
+                  {{ researcher.faculty }}
+                </td>
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 lg:table-cell hidden"
+                >
+                  {{ researcher.program }}
+                </td>
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 lg:table-cell hidden"
+                >
+                  {{ researcher.role }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div
+          *ngIf="!researcherLoading() && researchers().length > 0"
+          class="md:hidden space-y-4"
+        >
+          <div
+            *ngFor="let researcher of researchers()"
+            class="bg-white rounded-lg shadow border border-gray-200 p-4"
+          >
+            <div class="flex justify-between items-start">
+              <h3 class="font-medium text-gray-900">
+                {{ researcher.title ? researcher.title + " " : ""
+                }}{{ researcher.firstName }} {{ researcher.lastName }}
+              </h3>
+              <span class="text-xs text-gray-500">ID: {{ researcher.id }}</span>
+            </div>
+
+            <div class="mt-3 grid grid-cols-1 gap-2 text-sm">
+              <div>
+                <span class="text-gray-500">Email:</span>
+                <span class="font-medium ml-1">{{ researcher.email }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Faculty:</span>
+                <span class="font-medium ml-1">{{ researcher.faculty }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Program:</span>
+                <span class="font-medium ml-1">{{ researcher.program }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Role:</span>
+                <span class="font-medium ml-1">{{ researcher.role }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty state if no researchers -->
+        <div
+          *ngIf="
+            !researcherLoading() &&
+            researchers().length === 0 &&
+            !researcherError()
+          "
+          class="bg-white rounded-lg shadow-md border border-gray-200 p-6"
+        >
+          <div class="flex flex-col items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 text-gray-400 mb-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p class="text-center text-gray-500">
+              No researchers found matching your filters.
+            </p>
+            <p class="mt-1 text-center text-gray-500">
+              Try adjusting your search criteria.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

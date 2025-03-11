@@ -1,0 +1,245 @@
+/* color list status */
+@mixin legend-color($background-color, $width: 0) {
+  background-color: $background-color;
+
+  @if $width != 0 {
+    width: $width;
+  } @else {
+    border-radius: 50%;
+  }
+
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+}
+
+.legend {
+  display: block;
+  align-items: center;
+  list-style-type: none;
+
+  li {
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-right: 0.6rem;
+      display: inline-block;
+      width: 1.5rem;
+      height: 1.5rem;
+
+      &.yellow {
+        &-circle {
+          @include legend-color(#ffd54f, 0)
+        }
+        &-rectangle {
+          @include legend-color(#ffd54f, 2rem)
+        }
+      }
+      &.light-pink {
+        &-circle {
+          @include legend-color(#ffbeef, 0);
+        }
+        &-rectangle {
+          @include legend-color(#ffbeef, 2rem);
+
+        }
+      }
+      &.dark-pink {
+        &-circle {
+          @include legend-color($dark-pink-legend, 0);
+        }
+        &-rectangle {
+          @include legend-color($dark-pink-legend, 2rem);
+        }
+      }
+      &.black {
+        &-circle {
+          @include legend-color(#000, 0);
+        }
+        &-rectangle {
+          @include legend-color(#000, 2rem);
+        }
+      }
+      &.light-blue {
+        &-circle {
+          @include legend-color(#0db7f0, 0);
+
+          span {
+            width: 0.4rem;
+            height: 0.4rem;
+            background: #fff;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto;
+          }
+        }
+        &-rectangle {
+          @include legend-color(#0db7f0, 2rem);
+        }
+      }
+    }
+  }
+}
+  
+  // .colorlistdef-test li {
+  //   font-size: 14px;
+  //   margin-right: 16px;
+  //   display: flex;
+  //   align-items: center;
+  // }
+  
+  // .colorlistdef-test li span {
+  //   margin-right: 6px;
+  //   display: inline-block;
+  //   width: 16px;
+  //   height: 16px;
+  //   margin-top: -2px;
+  // }
+  
+  // .colorlistdef-test li span.greycolor {
+  //   background: #ffbeef;
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef-test li span.marooncolor {
+  //   background: #df2498;
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef-test li span.yellowcolor {
+  //   background: #ffd54f;
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef-test li span.blackcolor {
+  //   background: #000000;
+  //   border-radius: 50%;
+  // }
+
+  // .colorlistdef-test li span.lightpink {
+  //   background: #ffbeef;
+  //   width: 20px;
+  // }
+  
+  // .colorlistdef-test li span.darkpink {
+  //   background: #df2498;
+  //   width: 20px;
+  // }
+  
+  // .colorlistdef-test li span.you {
+  //   background: #ffd54f;
+  //   width: 20px;
+  // }
+  
+  // .colorlistdef-test li span.blackradcolor {
+  //   background: rgb(0, 0, 0);
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef-test li span.blueradcolor {
+  //   background: #0db7f0;
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef-test li span.blueradcolor span {
+  //   width: 4px;
+  //   height: 4px;
+  //   background: #fff;
+  //   border-radius: 50%;
+  //   display: block;
+  //   margin: 0 auto;
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // .colorlistdef {
+  //   display: flex;
+  //   align-items: center;
+  //   list-style-type: none;
+  //   padding: 8px 0;
+  // }
+  
+  // .colorlistdef li {
+  //   font-size: 14px;
+  //   margin-right: 16px;
+  //   display: flex;
+  //   align-items: center;
+  // }
+
+
+
+  // .colorlistdef li span {
+  //   margin-right: 6px;
+  //   display: inline-block;
+  //   width: 16px;
+  //   height: 16px;
+  //   margin-top: -2px;
+  // }
+  
+  // .colorlistdef li span.greycolor {
+  //   background: #ffbeef;
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef li span.marooncolor {
+  //   background: #df2498;
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef li span.yellowcolor {
+  //   background: #ffd54f;
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef li span.blackradcolor {
+  //   background: rgb(0, 0, 0);
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef li span.blueradcolor {
+  //   background: #0db7f0;
+  //   border-radius: 50%;
+  // }
+  
+  // .colorlistdef li span.lightpink {
+  //   background: #ffbeef;
+  //   width: 20px;
+  // }
+  
+  // .colorlistdef li span.darkpink {
+  //   background: #df2498;
+  //   width: 20px;
+  // }
+
+  // .colorlistdef li span.you {
+  //   background: #ffd54f;
+  //   width: 20px;
+  // }
+  
+  // .colorlistdef li span.blackradcolor {
+  //   background: black;
+  //   border-radius: 50%;
+  // }
+
+  // .colorlistdef li span.blueradcolor span {
+  //   width: 4px;
+  //   height: 4px;
+  //   background: #fff;
+  //   border-radius: 50%;
+  //   display: block;
+  //   margin: 0 auto;
+  // }
+
+  
+  

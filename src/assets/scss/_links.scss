@@ -1,0 +1,30 @@
+// ██╗     ██╗███╗   ██╗██╗  ██╗███████╗
+// ██║     ██║████╗  ██║██║ ██╔╝██╔════╝
+// ██║     ██║██╔██╗ ██║█████╔╝ ███████╗
+// ██║     ██║██║╚██╗██║██╔═██╗ ╚════██║
+// ███████╗██║██║ ╚████║██║  ██╗███████║
+// ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+
+// sets the global styling of anchor tags
+a {
+    font-family: BureauGrotesque, Helvetica, impact, "avenir next condensed heavy",
+        "Droid Sans", sans-serif;
+    letter-spacing: 0.045rem;
+    text-transform: uppercase;
+    font-size: 1rem;
+    text-decoration: none;
+    color: white;
+}
+
+::ng-deep a:focus{
+    outline: none !important;
+    background-color: transparent !important;
+    background: none !important;
+}
+
+::ng-deep li:focus{
+    outline: none !important;
+    background-color: transparent !important;
+    background: none !important;
+}
+

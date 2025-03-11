@@ -1,0 +1,282 @@
+// ██████╗  █████╗  ██████╗██╗  ██╗ ██████╗ ██████╗  ██████╗ ██╗   ██╗███╗   ██╗██████╗ ███████╗
+// ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝ ██╔══██╗██╔═══██╗██║   ██║████╗  ██║██╔══██╗██╔════╝
+// ██████╔╝███████║██║     █████╔╝ ██║  ███╗██████╔╝██║   ██║██║   ██║██╔██╗ ██║██║  ██║███████╗
+// ██╔══██╗██╔══██║██║     ██╔═██╗ ██║   ██║██╔══██╗██║   ██║██║   ██║██║╚██╗██║██║  ██║╚════██║
+// ██████╔╝██║  ██║╚██████╗██║  ██╗╚██████╔╝██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝███████║
+// ╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝
+
+.light-pink-gradient-background {
+  background: $light-pink-gradient-background;
+}
+
+.light-grey-gradient-background {
+  background: $light-grey-gradient-background;
+}
+
+.dark-pink-gradient-background {
+  background: $dark-pink-gradient-background;
+}
+dark-blue-background-color {
+  background:  linear-gradient(314deg, #37d5d6 0%, #2D4895 74%) !important;
+
+}
+.dark-pink-background-color {
+  background:   linear-gradient(to right, #752f72, #d69ed2) !important;
+
+}
+.dark-green-background-color {
+  background:  linear-gradient(314deg, #a0ea56 0%, #488F62 74%) !important;
+}
+.gainsboro-gradient-background {
+  background: $gainsboro-gradient-background
+}
+
+.yellow-gradient-background {
+  background: $yellow-gradient-background
+}
+
+.cyan-gradient-background {
+  background: $cyan-gradient-background;
+}
+
+.blue-background-color {
+  background: $blue-background-color;
+}
+
+.blue-twitter-gradient-background {
+  background: $blue-twitter-gradient-background;
+}
+
+.grey-geo-map-gradient-background {
+  background: $grey-geo-map-gradient-background;
+}
+
+.orange-gradient-background {
+  background: $orange-gradient-background;
+}
+
+.blue-gradient-background {
+  background: $blue-gradient-background;
+}
+
+.green-gradient-background {
+  background: $green-gradient-background;
+}
+
+
+.map-grd-bg {
+  background: rgb(215, 215, 215);
+  background: radial-gradient(
+    circle,
+    rgba(215, 215, 215, 1) 0%,
+    rgba(98, 98, 98, 1) 100%
+  );
+}
+.blue-grd-bg-twitter {
+  background: rgba(29, 161, 242, 1);
+  background: linear-gradient(
+    90deg,
+    rgba(29, 161, 242, 1) 0%,
+    rgb(95, 194, 255) 100%
+  );
+}
+
+.ylw-grd-bg {
+  background: rgb(213, 162, 0);
+  background: linear-gradient(
+    90deg,
+    rgba(213, 162, 0, 0.795) 0%,
+    rgba(255, 213, 79, 0.795) 100%
+  );
+}
+
+.prp-grd-bg {
+  background: rgb(177, 48, 214);
+  background: linear-gradient(
+    90deg,
+    rgba(214, 48, 186, 0.795) 0%,
+    rgba(224, 45, 170, 0.795) 67%,
+    rgba(252, 48, 208, 0.795) 100%
+  );
+}
+
+.or-grd-bg {
+  background: rgb(255, 148, 29);
+  background: linear-gradient(90deg,rgba(255, 150, 29, 0.795) 0%, rgba(231, 161, 21, 0.795) 67%, rgba(245, 203, 51, 0.795) 100%);
+}
+
+
+/// REPLACE
+
+.blue-grd-bg-beattyPage {
+  background: #2196f3;
+}
+
+
+.bl-grd-bg {
+    background: rgb(0, 90, 122);
+    background: linear-gradient(90deg, rgba(0, 90, 122, 0.79) 0%, rgba(0, 214, 218, 0.79) 100%);
+  }
+
+  .acc-grd-bg {
+    background: rgb(240, 240, 240);
+  }
+  
+
+  .gr-grd-bg {
+    background: rgb(16, 103, 24);
+    background: linear-gradient(
+      180deg,
+      rgba(16, 103, 24, 1) 0%,
+      rgb(89, 148, 11) 100%
+    );
+    // background: rgb(16, 103, 24);
+    // background: linear-gradient(
+    //   180deg,
+    //   rgba(16, 103, 24, 0.79) 0%,
+    //   rgba(147, 245, 19, 0.79) 100%
+    // );
+  }
+
+  .giving-tuesday-bg {
+    background-image: url('/../assets/images/giving-bg.png');
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.pnk-grd-bg {
+  background: rgb(255, 99, 170);
+  background: linear-gradient(
+    270deg,
+    rgba(255, 99, 169, 0.308) 0%,
+    rgba(223, 36, 151, 0.541) 100%
+  );
+}
+
+.blue-grd-bg-twitter {
+  background: rgba(29, 161, 242, 1);
+  background: linear-gradient(
+    90deg,
+    rgba(29, 161, 242, 1) 0%,
+    rgb(95, 194, 255) 100%
+  );
+}
+
+.acc-grd-bg {
+  background: rgb(240, 240, 240);
+}
+
+
+.llight-grey-gradient-background {
+  background: rgb(204, 204, 204);
+  background: linear-gradient(
+    90deg,
+    rgba(204, 204, 204, 1) 0%,
+    rgba(237, 237, 237, 1) 100%
+  );
+}
+
+.ylw-grd-bg {
+  background: rgb(213, 162, 0);
+  background: linear-gradient(
+    90deg,
+    rgba(213, 162, 0, 0.795) 0%,
+    rgba(255, 213, 79, 0.795) 100%
+  );
+}
+
+.blue-grd-bg-beattyPage {
+  background: #2196f3;
+}
+
+
+.bl-grd-bg {
+    background: rgb(0, 90, 122);
+    background: linear-gradient(
+      90deg,
+      rgba(0, 90, 122, 0.79) 0%,
+      rgba(0, 214, 218, 0.79) 100%
+    );
+  }
+
+    
+  .prp-grd-bg {
+    background: rgb(177, 48, 214);
+    background: linear-gradient(
+      90deg,
+      rgba(214, 48, 186, 0.795) 0%,
+      rgba(224, 45, 170, 0.795) 67%,
+      rgba(252, 48, 208, 0.795) 100%
+    );
+  }
+  
+  .giving-tuesday-bg {
+    background-image: url('/../assets/images/giving-bg.png');
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+  }
+  
+  .or-grd-bg {
+    background: rgb(255, 148, 29);
+    background: linear-gradient(
+      90deg,
+      rgba(255, 150, 29, 0.795) 0%,
+      rgba(231, 161, 21, 0.795) 67%,
+      rgba(245, 203, 51, 0.795) 100%
+    );
+  }
+
+//   .bkgld-grd-bg {
+//   background-image: url('/../assets/images/banner-bg.png');
+//   // background-image: url('../../assets/images/banner-bg.png');
+//   background-position: center; /* Center the image */
+//   background-repeat: no-repeat; /* Do not repeat the image */
+//   background-size: cover;
+// }
+  
+.blue-grd-bg {
+  background: rgb(0, 127, 162);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 127, 162, 1) 0%,
+    rgba(0, 184, 235, 1) 35%,
+    rgba(0, 212, 255, 1) 100%
+  );
+}
+  
+  .gr-grd-bg {
+    // background: rgb(37,190,53);
+    // background: linear-gradient(180deg, rgba(37, 190, 52, 0.795) 0%, rgba(17, 213, 17, 0.795) 67%, rgba(147, 245, 19, 0.795) 100%);
+    background: rgb(16, 103, 24);
+    background: linear-gradient(180deg, rgba(16, 103, 24, 0.79) 0%, rgba(147, 245, 19, 0.79) 100% );
+  }
+  
+  // .prp-grd-bg {
+  //   background: rgb(177, 48, 214);
+  //   background: linear-gradient(
+  //     90deg,
+  //     rgba(178, 48, 214, 0.795) 0%,
+  //     rgba(218, 45, 224, 0.795) 67%,
+  //     rgba(249, 48, 252, 0.795) 100%
+  //   );
+  // }
+  
+
+  
+
+  

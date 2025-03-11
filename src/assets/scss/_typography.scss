@@ -1,0 +1,102 @@
+// Extracted from WWIN
+
+p {
+    font-size: 12px;
+    // color: $form-placeholder-color;
+  }
+  
+  .mobile-h3 {
+    font-size: 18px !important;
+    font-weight: 600;
+  }
+  
+  .mobile-h5 {
+    font-size: 14px !important;
+    font-weight: 500;
+  }
+
+  .sub-text {
+    font-size: 13px;
+    color: $form-placeholder-color;
+    font-weight: 500;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .privacy-seetings-card-header {
+   font-size: 15px;
+  }
+  
+  #agenda-date-text {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  //Upload component - Import Profile section
+  .import-button-text {
+    margin-top: 5px;
+    font-family: BureauGrotesque, Helvetica, impact,
+      'avenir next condensed heavy', 'Droid Sans', sans-serif;
+    letter-spacing: 0.045rem;
+    text-transform: uppercase;
+    font-size: 0.88889rem;
+    font-weight: bolder;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+  }
+
+  .new-header-label {
+    color: $card-secondary-text-color;
+    margin: 0px 0px 5px 0px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .fileDesc {
+    font-size: 16px;
+    color: $card-secondary-text-color;
+    padding: 10px;
+  }
+
+  .card-instructions {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: $card-secondary-text-color;
+  }
+
+  .upload-info-link {
+    color: $unverified !important;
+    text-decoration: underline !important;
+    cursor: pointer;
+    text-align: center;
+    margin-left: 5px;
+    font-size: 12px;
+  
+    &:hover {
+      color: rgb(0, 0, 204) !important;
+    }
+  }
+
+  .unverified-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: $unverified;
+  }
+
+  .fw500 {
+    font-weight: 500;
+  }
+
+  @media (max-width: 991px) {
+    h3 {
+      font-size: 18px !important;
+      font-weight: 600;
+    }
+    h5 {
+      font-size: 14px !important;
+      font-weight: 500;
+    }
+  }

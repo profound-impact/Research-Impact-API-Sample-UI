@@ -1,0 +1,224 @@
+.mat-tab-group {
+    border-bottom: solid 1px rgb(207, 207, 207);
+  }
+  
+  // overrides color of the mat tabs text & selected inkbar
+  .mat-tab-group.mat-primary .mat-ink-bar,
+  .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: #3c4252;
+  }
+  
+  // overrides font size of the mat tab labels
+  .mat-tab-label {
+    font-size: 25px !important;
+  }
+  
+  // overrides the background color behind the mat tabs
+  .mat-tab-labels {
+    background-color: #f0f0f0;
+  }
+
+  // ███████╗██╗██████╗ ███████╗    ████████╗ █████╗ ██████╗ ███████╗
+// ██╔════╝██║██╔══██╗██╔════╝    ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝
+// ███████╗██║██║  ██║█████╗         ██║   ███████║██████╔╝███████╗
+// ╚════██║██║██║  ██║██╔══╝         ██║   ██╔══██║██╔══██╗╚════██║
+// ███████║██║██████╔╝███████╗       ██║   ██║  ██║██████╔╝███████║
+// ╚══════╝╚═╝╚═════╝ ╚══════╝       ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚══════╝
+
+// #region side tabs
+
+// sets the visibility logic of the side tabs
+.showTab {
+  display: block !important;
+}
+.hideTab {
+  display: none !important;
+}
+
+.tab-completed {
+  color: $success;
+  font-size: 16px
+}
+
+// sets the styling of the web profile tab content area
+.profile-tab-content {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: 600px;
+  border: 0px;
+}
+
+// sets the styling of the mobile profile tab content area
+.mobile-profile-tab-content {
+  padding: 0px !important;
+  height: 600px !important;
+  border: 0px !important;
+}
+
+// sets the global side tab styling
+.nav-tabs li {
+  cursor: pointer;
+}
+.tabs-left {
+  border-bottom: none;
+  padding-top: 2px;
+  text-align: right;
+  border-right: 0px;
+}
+.tabs-left > li {
+  float: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  width: 160px;
+  height: 33px;
+  font-family: Arial Narrow;
+  font-size: 20px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: $btn-dark-grey;
+}
+.tabs-left > li.active {
+  border-bottom-color: #ddd;
+  border-right-color: darkslategray;
+  border-left-color: transparent;
+  color: $btn-dark-grey;
+  // color: #646464;
+}
+
+.tabs-right > li {
+  width: 160px;
+  height: 30px;
+  font-family: Arial Narrow;
+  font-size: 20px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color:$btn-dark-grey;
+  // color: #000000;
+}
+
+
+.tabs-right > li.active {
+  border-bottom-color: #ddd;
+  border-right-color: darkslategray;
+  border-left-color: transparent;
+  color:$btn-dark-grey;
+  // color: #000000;
+  // background-color: lightgray;
+}
+
+.tabs-left > li.active > a,
+.tabs-left > li.active > a:hover,
+.tabs-left > li.active > a:focus {
+  border-bottom-color: #ddd;
+  border-right-color: darkslategray;
+  border-left-color: transparent;
+}
+
+.tabs-right > li.active > a,
+.tabs-right > li.active > a:hover,
+.tabs-right > li.active > a:focus {
+  border-bottom-color: #ddd;
+  border-right-color: darkslategray;
+  border-left-color: transparent;
+}
+
+.tabs-left > li > a {
+  border-radius: 4px 0 0 4px;
+  margin-right: 0;
+  display: block;
+}
+
+.tabs-right > li > a {
+  border-radius: 0 4px 4px 0;
+  margin-right: 0;
+  display: block;
+}
+
+.sideways {
+  margin-top: 50px;
+  border: none;
+  position: relative;
+}
+.sideways > li {
+  height: 20px;
+  width: 120px;
+  margin-bottom: 100px;
+}
+.sideways > li > a {
+  border-bottom: 1px solid #ddd;
+  border-right-color: transparent;
+  text-align: center;
+  border-radius: 4px 4px 0px 0px;
+}
+.sideways > li.active > a,
+.sideways > li.active > a:hover,
+.sideways > li.active > a:focus {
+  border-bottom-color: transparent;
+  border-right-color: #ddd;
+  border-left-color: #ddd;
+}
+.sideways.tabs-left {
+  left: -50px;
+}
+.sideways.tabs-left > li {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+.tabs-left li {
+  width: 100%;
+  font-family: "Bureau Grotesque", Helvetica, impact, "avenir next",
+    "Droid Sans", sans-serif;
+  padding: 0 20px 0 0;
+  color: #b9b9b9;
+}
+.tabs-left li.active:before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 30px;
+  right: 0;
+  background: $btn-dark-grey;
+}
+.unverified-tab {
+  margin-right: 7px;
+  transform: translate(0px -30px) !important;
+}
+
+.mat-tab-group {
+  border-bottom: none;
+}
+// #endregion
+
+// ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗    ████████╗ █████╗ ██████╗ ███████╗
+// ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝    ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝
+// ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗         ██║   ███████║██████╔╝███████╗
+// ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝         ██║   ██╔══██║██╔══██╗╚════██║
+// ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗       ██║   ██║  ██║██████╔╝███████║
+// ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚═╝╚══════╝╚══════╝       ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚══════╝
+
+// #region mobile tab styling
+
+// sets the style for all mobile tabs
+.userTab {
+  padding: 6px 6px 6px 40px;
+  margin: 0px;
+  border-radius: 5px;
+}
+
+// sets the style for the current active mobile tabs
+.selectedUserTab {
+  background-color: rgb(243, 243, 243);
+  border: rgb(190, 190, 190) solid 1px;
+  height: 33px;
+}

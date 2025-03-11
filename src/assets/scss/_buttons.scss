@@ -1,0 +1,252 @@
+
+.button {
+
+  padding: 1rem 2rem;
+  font-size: 1.3rem;
+  font-family: BureauGrotesque, Helvetica, impact, "avenir next condensed heavy", "Droid Sans", sans-serif;
+  letter-spacing: 0.045rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1;
+  border-radius: .4rem;
+  border: none;
+
+  &--magenta {
+    color: white;
+    background-color: $btn-magenta
+  }
+
+  &--cyan {
+    color: white;
+    background-color: $btn-cyan
+  }
+
+  &--grey {
+    color: white;
+    background-color: $btn-grey;
+  }
+
+  &--pink {
+    color: white;
+    background-color: $btn-pink;
+  }
+
+  &--green {
+    color: white;
+    background-color: $btn-green;
+  }
+
+  &--orange {
+    color: white;
+    background-color: $btn-orange;
+  }
+
+  &--blue {
+    color: white;
+    background-color: $btn-blue;
+
+    &-login {
+      color: white;
+      background-color: $btn-blue-login;
+    }
+  }
+
+  &--red {
+    color: white;
+    background-color: $btn-red;
+    &:hover:enabled {
+      background-color: #bb2c2c;
+    }
+    &:focus {
+      background-color:#494949; 
+    }
+  }
+
+  &--dark-grey {
+    color: white;
+    background-color: $btn-dark-grey;
+    border: none;
+    outline: none;
+    &:disabled {
+      color: rgb(218, 218, 218);
+      background-color: $btn-dark-grey;
+    }
+    &:hover:enabled {
+      color:#FFF;
+      background-color: #494949;
+    }
+    &:focus {
+      background-color:#494949; 
+    }
+  }
+
+  &--add {
+    width: 5.2rem;
+    min-width: 5.2rem;
+    max-width: 5.2rem;
+    background-color: $btn-dark-grey;
+    color: white;
+    &:hover:enabled {
+      background-color: #494949;
+    }
+    &:focus {
+      background-color:#494949; 
+    }
+  }
+
+  &--edit {
+    width: 5.2rem;
+    min-width: 5.2rem;
+    max-width: 5.2rem;
+    background-color: $btn-dark-grey;
+    color: white;
+    &:hover:enabled {
+      background-color: #494949;
+    }
+    &:focus {
+      background-color:#494949; 
+    }
+  }
+
+  &--delete {
+    width: 5.2rem;
+    min-width: 5.2rem;
+    max-width: 5.2rem;
+    background-color: $btn-dark-grey;
+    color: white;
+    &:hover:enabled {
+      background-color: #494949;
+    }
+    &:focus {
+      background-color:#494949; 
+    }
+  }
+
+  @media only screen and (max-width: 45em) {
+    padding: 1rem 1.5rem;
+    margin-top: 7px;
+  }
+}
+
+// sets the different button type styles
+.btn-dark {
+  background-color: #646464;
+  border-color: #646464;
+}
+
+button:active, .btn:active, .button:active, button:focus, .btn:focus, .button:focus {
+  outline: none;
+  border: none;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 15px;
+  font-family: BureauGrotesque, Helvetica, impact, "avenir next condensed heavy", "Droid Sans", sans-serif;
+  letter-spacing: 0.045rem;
+  text-transform: uppercase;
+  font-size: 1.3rem;
+  // font-size: 0.88889rem;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1;
+}
+
+
+
+
+.win {
+    width: 90%;
+    margin: 20px 5% 20px 5%;
+    color: white;
+    background-color: #df2498;
+    &:hover {
+      color: rgb(247, 247, 247);
+      background-color: rgb(204, 29, 137);
+    }
+}
+
+.btn-zoomy {
+    border-radius: 50px;
+    border: none;;
+    font-size: 1.003rem;
+    padding: 0.7rem;
+}
+
+
+
+.inputWrapper {
+  height: 40px;
+  width: 20%;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+  margin-left: 10px;
+  margin-top: 0px;
+  /*Using a background color, but you can use a background image to represent a button*/
+  color: white;
+  background-color: $btn-dark-grey;
+  border-color: #646464;
+  padding: 13px 20px;
+  font-size: 15px;
+  font-family: BureauGrotesque, Helvetica, impact, "avenir next condensed heavy", "Droid Sans", sans-serif;
+  letter-spacing: 0.045rem;
+  text-transform: uppercase;
+  font-size: 0.88889rem;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1;
+}
+.fileInput {
+  cursor: pointer;
+  height: 100%;
+  position: absolute;
+  color: white;
+  top: 0;
+  right: 0;
+  z-index: 99;
+  /*This makes the button huge. If you want a bigger button, increase the font size*/
+  font-size: 50px;
+  /*Opacity settings for all browsers*/
+  opacity: 0;
+  -moz-opacity: 0;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
+
+.inputWrapper-mobile {
+  height: 40px;
+  width: 100px;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 10px;
+  margin-left: 10px;
+  margin-top: 0px;
+  color: white;
+  /*Using a background color, but you can use a background image to represent a button*/
+  background-color: $btn-dark-grey;
+}
+.fileInput-mobile {
+  cursor: pointer;
+  height: 100%;
+  position: absolute;
+  width: 100px;
+  top: 0;
+  right: 0;
+  color: white;
+  z-index: 99;
+  /*This makes the button huge. If you want a bigger button, increase the font size*/
+  font-size: 50px;
+  /*Opacity settings for all browsers*/
+  opacity: 0;
+  -moz-opacity: 0;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}

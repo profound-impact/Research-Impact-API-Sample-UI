@@ -1,0 +1,169 @@
+.profile {
+  &__tab {
+    &__container {
+      height: 100%;
+      max-height: calc(100vh - 64px - 46px);
+      width: 100%;
+    }
+  }
+  &__content {
+      height: 100%;
+      max-height: calc(100vh - 64px - 48px - 46px);
+      width: 100%;
+      padding: 2rem;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+    &__form {
+      &__container {
+        height: height 100%;
+        max-height: calc(100vh - 64px - 48px - 47px - 4rem);
+        padding: 1rem;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        row-gap: .5rem;
+        column-gap: 1rem;
+      }
+  }
+  &__section {
+    &__card {
+        transition: transform .5s;
+        // transform-style: preserve-3d;
+        height: calc(100vh - 64px - 48px - 47px - 4rem);
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    &__empty {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    &__list {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        backface-visibility: hidden;
+        height: 100%;
+        width: 100%;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: $form-text-color;
+        text-align: left;
+        word-wrap: break-word;
+        &--header {
+            width: 100%;
+            height: 54px;
+            min-height: 54px;
+            max-height: 54px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px $border-color solid;
+        }
+        &--heading {
+            font-size: 2rem;
+            font-weight: 700;
+            color: $card-text-color;
+            padding-left: .5rem;
+        }
+        &--content {
+            width: 100%;
+            max-height: calc(100vh - 64px - 48px - 47px - 54px - 4rem); 
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+        &--item {
+            width: 100%;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid $border-color;
+            &--text {
+              display: flex;
+              flex-direction: column;
+              width: 90%;
+              margin: 10px 0 10px 10px;
+            }
+        }
+        &--sidebar {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          justify-content: space-between;
+          margin: 10px 10px 10px 0;
+          &--buttons {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+          }
+          &--unverified {
+            margin-top: .5rem;
+          }
+        }
+    }
+    &__form {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      // backface-visibility: hidden;
+      transform: rotateY(180deg);
+      // z-index: 10000;
+      &--header {
+        width: 100%;
+        height: 54px;
+        min-height: 54px;
+        max-height: 54px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px $border-color solid;
+      }
+      &--heading {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $card-text-color;
+        padding-left: .5rem;
+      }
+      &--content {
+          width: 100%;
+          height: calc(100vh - 64px - 48px - 47px - 54px - 4rem);
+          min-height: calc(100vh - 64px - 48px - 47px - 54px - 4rem); 
+          max-height: calc(100vh - 64px - 48px - 47px - 54px - 4rem); 
+          overflow-x: hidden;
+          overflow-y: scroll;
+          background-color: white;
+      }
+      &--form {
+        padding: 1rem;
+      }
+    }
+  }
+  @media only screen and (max-width: 55em) {
+    &__form {
+      &__container {
+        max-height: calc(100vh - 64px - 48px - 47px - 4rem - 100px);
+      }
+      &--save {
+        padding-bottom: 1rem;
+      }
+    }
+    &__section {
+      &__list {
+        &--content {
+          max-height: calc(100vh - 64px - 48px - 47px - 4rem - 100px);
+        }
+      }
+      &__card {
+        max-height: calc(100vh - 64px - 48px - 47px - 4rem - 100px);
+      }
+    }
+  }
+}

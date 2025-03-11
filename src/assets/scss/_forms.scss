@@ -1,0 +1,201 @@
+// ███████╗ ██████╗ ██████╗ ███╗   ███╗███████╗
+// ██╔════╝██╔═══██╗██╔══██╗████╗ ████║██╔════╝
+// █████╗  ██║   ██║██████╔╝██╔████╔██║███████╗
+// ██╔══╝  ██║   ██║██╔══██╗██║╚██╔╝██║╚════██║
+// ██║     ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████║
+// ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝
+
+.form {
+  &__label {
+    padding: .5rem 0 0 .5rem;
+    margin: 0;
+    font-size: 1.6rem !important;
+    font-weight: 600;
+    color: $form-text-color;
+    text-align: left;
+  }
+  &__control {
+    color: $form-text-color;
+    border: .1rem solid $form-ctrl-border-color;
+    border-radius: .5rem;
+    font-size: 1.6rem !important;
+  }
+  &__required {
+    color: $warning;
+  }
+  &__success {
+    color: $success;
+  }
+}
+
+input.form__control {
+  height: 3.2rem;
+  font-size: 1.6rem !important;
+  padding: 0 .8rem;
+  &:focus {
+    border: .2rem solid $form-text-color;
+    outline: 0;
+  }
+}
+
+select.form__control {
+  height: 3.2rem;
+  font-size: 1.6rem;
+  padding: 0 .8rem;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  position: relative;
+  background-image:
+    linear-gradient(45deg, transparent 50%, $form-ctrl-border-color 50%),
+    linear-gradient(135deg, $form-ctrl-border-color 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.1rem) calc(1em - .1rem),
+    calc(100% - .7rem) calc(1em - .1rem),
+    calc(100% - 1.5em) calc(1em - .1rem);
+  background-size:
+    5px 5px,
+    5px 5px,
+    1px 1.5em;
+  background-repeat: no-repeat;
+  &:focus {
+    border: .2rem solid $form-text-color;
+    outline: 0;
+  }
+}
+
+textarea.form__control {
+  font-size: 1.6rem !important;
+  padding: .4rem .8rem;
+  &:focus {
+    border: .2rem solid $form-text-color;
+    outline: 0;
+  }
+}
+
+// sets the height of the impact story text area
+.impact-text-area {
+  height: 86px !important;
+}
+
+// sets the height of the specialty text area
+.specialty-text-area {
+  height: 50px !important;
+}
+
+// sets the default global height for text area elements
+.text-area {
+  height: 60px !important;
+}
+
+// sets the global input styling placeholder color
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: $form-placeholder-color !important;
+}
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: $form-placeholder-color !important;
+}
+:-ms-input-placeholder {
+  /* IE 10+ */
+  color: $form-placeholder-color !important;
+}
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: $form-placeholder-color !important;
+}
+
+input.ng-invalid.ng-dirty {
+  border-width: 1px;
+  border-color: $warning;
+}
+
+select.ng-invalid.ng-dirty {
+  border-width: 1px;
+  border-color: $warning;
+}
+
+textarea.ng-dirty.ng-invalid.ng-touched {
+  border-width: 1px;
+  border-color: $warning;
+}
+
+////// OLD CODE - CHECK IF USED ///////
+
+.mat-form-field + .mat-form-field {
+    margin-left: 8px;
+}
+
+// sets the input element border color on focus
+input.form-control:focus {
+    border-color: #757575 !important;
+    outline: 0 none;
+}
+  
+// sets the text area element border color on focus
+textarea.form-control:focus {
+border-color: #757575 !important;
+outline: 0 none;
+}
+
+// sets the select element border color on focus
+select.form-control:focus {
+border-color: #757575 !important;
+outline: 0 none;
+}
+  
+// sets the global default text area styling
+textarea.form-control {
+  padding-left: 8px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+// sets the global default bottom margin of form groups
+.form-group {
+  margin-bottom: 4px;
+}
+
+// sets the global default styles for control labels
+.control-label {
+  padding: 5px 0px 0px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: $card-secondary-text-color;
+  margin-bottom: 0px;
+}
+
+// sets the global default styles for form controls
+.form-control {
+  height: 32px !important;
+  padding-left: 4px;
+  padding-right: 4px;
+  color: $card-secondary-text-color;
+  border-color: rgb(201, 201, 201);
+}
+
+
+//checkbutton 
+.checkbutton {
+  position: absolute;
+  top: 3px;
+  right: 0px;
+  color: #b5b5b5;
+  font-size: 21px;
+
+  &.checkactive {
+    color: $checkbutton-active-color;
+  }
+}
+
+input[type=text]:focus{
+  outline: none !important;
+  background-color: transparent !important;
+  background: none !important;
+}
+::ng-deep input[type=text]:focus{
+  outline: none !important;
+  background-color: transparent !important;
+  background: none !important;
+}

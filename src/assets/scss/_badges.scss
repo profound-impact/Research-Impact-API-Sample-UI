@@ -1,0 +1,53 @@
+.badge-warnings {
+    background-color: rgba(221, 89, 199, 0.795);
+    border-color: rgba(230, 69, 202, 0.795);
+    color: #ffffff;
+  }
+
+  .unverified-badge {
+    font-size: 9px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: rgb(82, 123, 255);
+    color: white;
+    text-transform: lowercase;
+  }
+  
+  .unverified-badge-red {
+    font-size: 9px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: rgb(255, 72, 72);
+    color: white;
+    text-transform: lowercase;
+  }
+  
+  .unverified-badge-blue {
+    font-size: 12px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: $unverified;
+    color: white;
+    text-transform: lowercase;
+  }
+  
+  .unverified-badge-number {
+    font-size: 9px;
+    border-radius: 50%;
+    padding: 4px 5px 4px 7px;
+    background-color: rgb(255, 72, 72);
+    color: white;
+    text-transform: lowercase;
+  }
+
+  .badge-position {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+  }
+
+  .badge-primary {
+    color: #fff;
+    background-color:$unverified;
+}
+

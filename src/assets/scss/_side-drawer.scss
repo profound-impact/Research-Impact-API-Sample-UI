@@ -1,0 +1,53 @@
+// ███████╗██╗██████╗ ███████╗    ██████╗ ██████╗  █████╗ ██╗    ██╗███████╗██████╗ 
+// ██╔════╝██║██╔══██╗██╔════╝    ██╔══██╗██╔══██╗██╔══██╗██║    ██║██╔════╝██╔══██╗
+// ███████╗██║██║  ██║█████╗      ██║  ██║██████╔╝███████║██║ █╗ ██║█████╗  ██████╔╝
+// ╚════██║██║██║  ██║██╔══╝      ██║  ██║██╔══██╗██╔══██║██║███╗██║██╔══╝  ██╔══██╗
+// ███████║██║██████╔╝███████╗    ██████╔╝██║  ██║██║  ██║╚███╔███╔╝███████╗██║  ██║
+// ╚══════╝╚═╝╚═════╝ ╚══════╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝
+
+::ng-deep mat-drawer-container {
+    position: absolute !important;
+    left: 0px;
+    top: 63px;
+    height: calc(100% - 110px) !important;
+}
+
+mat-drawer {
+    padding: 0px;
+    background-color: rgb(37, 37, 37) !important;
+    max-width: 280px;
+    border-color: none;
+}
+
+mat-drawer-content {
+    padding: 0px;
+}
+
+.mat-drawer-side {
+    border-right: solid 0px rgba(226, 226, 226, 0.12);
+    border-left: solid 0px rgba(226, 226, 226, 0.12);
+}
+
+.mat-tab-group {
+    border-bottom: solid 1px rgb(207, 207, 207);
+}
+
+.mat-drawer-inner-container {
+    overflow: hidden;
+}
+
+.sidenav-folded {
+    width: 70px;
+  }
+  
+  .sidenav-unfolded {
+    width: 280px;
+  }
+  
+  .main-content-folded {
+    margin-left: 70px !important;
+  }
+  
+  .main-content-unfolded {
+    margin-left: 70px !important;
+  }

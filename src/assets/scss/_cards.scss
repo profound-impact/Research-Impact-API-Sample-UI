@@ -1,0 +1,605 @@
+//  ██████╗ █████╗ ██████╗ ██████╗ ███████╗
+// ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝
+// ██║     ███████║██████╔╝██║  ██║███████╗
+// ██║     ██╔══██║██╔══██╗██║  ██║╚════██║
+// ╚██████╗██║  ██║██║  ██║██████╔╝███████║
+//  ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝
+
+.card {
+    height: auto;
+    width: auto;
+    border-radius: 4px;
+    border: none;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+
+    &--title {
+      color: $secondary-text-color;
+      font-size: 2rem;
+      margin-left: 1.5rem;
+      padding-top: .5rem;
+      &--only {
+        color: $secondary-text-color;
+        font-size: 2rem;
+        margin-left: 1.5rem;
+        padding: 1.5rem 0 1.5rem 0;
+      }
+    }
+
+    &--subtitle {
+      color: $secondary-text-color;
+      font-size: 1.5rem;
+      margin-left: 1.5rem;
+      padding-bottom: 1rem;
+    }
+
+    &--h1 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      text-align: center;
+      color: $card-text-color;
+    }
+
+    &--h2 {
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: $card-text-color;
+
+      // &-alt-primary {
+      //   font-weight: 500;
+      //   font-size: 1.6rem;
+      //   color: $primary-text-color;
+      // }
+    }
+
+    &--h3 {
+      font-weight: 600;
+      font-size: 1.6rem;
+      color: $card-text-color;
+    }
+
+    &--h4 {
+      font-size: 1.4rem;
+      color: $misc-page-text-color;
+
+      &-alt-primary {
+        font-size: 1.4rem;
+        color: $primary-text-color;
+      }
+    }
+
+    &--h5 {
+      font-size: 1.35rem;
+      color: $card-text-color;
+    }
+
+    &--h5-small {
+      font-size: 1.3rem;
+      color: $card-text-color;
+
+      &-alt-primary {
+        font-size: 1.3rem;
+        color: $primary-text-color;
+      }
+    }
+
+    &--p {
+      font-size: 1.5rem;
+      color: $card-text-color;
+
+      &-alt {
+        font-size: 1.5rem;
+        color: $misc-page-text-color;
+      }
+    }
+
+    &--small {
+      font-size: 1.2rem;
+      color: $card-secondary-text-color;
+      
+      &-alt {
+        font-size: 1.2rem;
+        color: $card-text-color;
+      }
+
+      &-alt-black {
+        font-size: 1.2rem;
+        color: $misc-page-text-color
+      }
+    }
+
+    &--misc-pages {
+      font-size: 1.25rem;
+      color: $misc-page-text-color;
+    }
+
+    &--system-requirements-config {
+      font-size: 2rem;
+      color: $system-requirements-text-color;
+    }
+
+    &--system-requirements-message {
+      font-size: 1.8rem;
+      color: $system-requirements-text-color;
+    }
+
+    &--login-info {
+      font-size: 1.1rem;
+      color: $primary-text-color;
+    }
+
+    &--warning {
+      padding: 3px;
+      margin: 0px;
+      background-color: rgb(255, 100, 100);
+      color: white;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    &--time-zone-title {
+      font-size: 1.2rem;
+      color: $card-text-color;
+      width: 100%;
+      text-align: center;
+    }
+
+    &--time-zone-badge {
+
+      &--pink {
+        width: 100%;
+        text-align: center;
+        font-size: 1rem;
+        padding: .3rem .5rem;
+        border-radius: .4rem;
+        color: white;
+        background-color: $pink-badge;
+        border-color: $pink-badge;
+      }
+
+      &--yellow {
+        width: 100%;
+        text-align: center;
+        font-size: 1rem;
+        padding: .3rem .5rem;
+        border-radius: .4rem;
+        color: white;
+        text-align: center;
+        background-color: $yellow-badge;
+        border-color: $yellow-badge;
+      }
+    }
+}
+
+// sets the web profile card height
+.card.profile-card {
+  height: 514px;
+}
+
+// sets the mobile profile card height
+.card.mobile-profile-card {
+  background-color: #fafafa;
+}
+
+// sets the profile card footer padding
+.profile-card-footer {
+  padding: 10px 0px;
+}
+
+.ng-scroll-view {
+  padding: 0px 10px;
+}
+
+.card-title {
+  // font-family: Verdana;
+  font-size: 0.85vw;
+  // font-weight: bold;
+  // font-style: normal;
+  // font-stretch: normal;
+  // line-height: normal;
+  // letter-spacing: normal;
+  color: #1b1b1b;
+  margin: 0px;
+  word-wrap: normal;
+}
+
+// Dashboard
+.card-title-mobile {
+  // font-family: Verdana;
+  font-size: 3vw;
+  // font-weight: bold;
+  // font-style: normal;
+  // font-stretch: normal;
+  // line-height: normal;
+  // letter-spacing: normal;
+  color: #1b1b1b;
+  margin: 0px;
+  word-wrap: normal;
+}
+
+.card-text-mobile {
+  // font-family: Verdana;
+  font-size: 3vw;
+  // font-weight: normal;
+  // font-style: normal;
+  // font-stretch: normal;
+  // line-height: normal;
+  // letter-spacing: normal;
+  color: #1b1b1b;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+///
+.card .card-header {
+    padding: 10px, 10px, 10px, 0px;
+    margin: 0px;
+    height: 82px;
+  }
+  .card-banner {
+    height: 354px;
+    margin: 5px, 5px, 5px, 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+
+  .card-banner .card-header {
+    padding: 10px, 10px, 10px, 0px;
+    margin: 0px;
+    height: 82px;
+  }
+
+  .card-text {
+    // font-family: Verdana;
+    font-size: 12px;
+    // font-weight: normal;
+    // font-style: normal;
+    // font-stretch: normal;
+    // line-height: normal;
+    // letter-spacing: normal;
+    color: #1b1b1b;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+
+  .card .card-header .card-text-small {
+    // font-family: Verdana;
+    font-size: 10px;
+    // font-weight: normal;
+    // font-style: normal;
+    // font-stretch: normal;
+    // line-height: normal;
+    // letter-spacing: normal;
+    color: #9b9b9b;
+    margin-bottom: 0px;
+  }
+  .card .card-body {
+    padding: 0px;
+    margin: 0px;
+    height: 272px;
+    background-color: #f0f3f7;
+  }
+  .card .card-body .card-img-overlay .btn {
+    width: 264px;
+    height: 48px;
+    border-radius: 4px;
+    background-color: #de2398;
+  }
+  .card .card-body .card-img {
+    width: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding-top: 10px;
+  }
+  .card-banner .card-body-banner {
+    padding: 0px;
+    margin: 0px;
+    height: 272px;
+    background-color: #f0f3f7;
+  }
+  .card-banner .card-body-banner .card-img-overlay .btn {
+    width: 264px;
+    height: 48px;
+    border-radius: 4px;
+    background-color: #de2398;
+  }
+  .card-banner .card-body-banner .card-img {
+    width: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding-top: 10px;
+  }
+
+  .card-small {
+    height: 111px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-tall {
+    height: 700px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-med {
+    height: 700px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-extra-tall {
+    // height: 700px;
+    height: 850px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-extra-tall-inside {
+    // height: 610px;
+    height: 770px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-half {
+    // height: 700px;
+    height: 514px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-half-inside {
+    // height: 610px;
+    height: 440px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-wwin-news {
+    // height: 700px;
+    height: 314px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-wwin-news-inside {
+    // height: 610px;
+    height: 240px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-inside {
+    height: 610px;
+    // height: 1010px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-inside-med {
+    height: 610px;
+    // height: 1010px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-auto {
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .card-small .card-header-lg {
+    height: 111px;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  // Extracted from ClassOf2020
+
+  .card-2020 {
+    height: 404px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+
+  .card-news {
+    height: 310px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+
+  @media (max-width: 991px) {
+    .stretch-card {
+      height: 200px !important;
+    }
+
+    .card-banner {
+      height: 200px !important;
+    }
+    .card-body-banner {
+      height: 200px !important;
+    }
+  }
+
+
+  // Extracted from JOHN Beatty
+
+  .about-john-beatty-card-text {
+    // font-family: Verdana;
+    font-size: 12px;
+    // font-weight: normal;
+    // font-style: normal;
+    // font-stretch: normal;
+    // line-height: normal;
+    // letter-spacing: normal;
+    color: #818181;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: justify;
+  }
+
+  .about-john-card-extra-tall {
+    height: 990px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  }
+  
+  .about-john-card-extra-tall-inside {
+    height: 915px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .chat-card-extra-tall-inside {
+    height: 915px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+  
+  .chat-card-extra-tall-inside-mobile {
+    height: 885px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+
+  // Extracted from Profound Impact Day page
+  .chat-card-extra-tall-inside-mobile-pi {
+    height: 770px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+
+  .chat-card-extra-tall-inside-mobile-giving-tuesday {
+    height: 905px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+
+  .card-extra-tall-classOf2020 {
+    height: 867px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+
+  .chat-card-extra-tall-inside-mobile-black-gold {
+    height: 905px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+  }
+
+  .publication-card{
+    overflow-y: scroll;
+    position: relative;
+  }
+  .publication-card-body{
+    border: none !important;
+  }
+
+  .profile-container {
+    width: 96%;
+    margin-left: 2%;
+  }
+  
+  .mobile-profile-container {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .card-header {
+    padding: 10px, 0px;
+  }
+
+  .mobile-card-body {
+    background-color: #fafafa;
+  }
+  
+
+  .card.settings-profile-card {
+    height: 100%;
+  }
+  
+  .card.profile-card {
+    height: 514px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+  }
+
+  .card-footer {
+    padding: 10px, 0px;
+  }
+  
+  .upload-card {
+    width: 100%;
+    padding: 20px 30px 20px 20px;
+    margin: 10px 0px 0px 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: white;
+    border-radius: 5px;
+  }
+//   .card {
+
+//     &__header {
+
+//     }
+
+//     &__title {
+
+//     }
+
+//     &__text {
+
+//     }
+
+//     &--small {
+
+//     }
+
+//     &--media {
+
+//     }
+
+//     &--large {
+
+//     }
+    
+//     &__inside {
+
+//         &--small {
+
+//         }
+    
+//         &--media {
+    
+//         }
+    
+//         &--large {
+    
+//         }
+
+//     }
+
+//   }

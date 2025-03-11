@@ -1,0 +1,88 @@
+//  ██████╗ ██████╗ ██╗      ██████╗ ██████╗ ███████╗
+// ██╔════╝██╔═══██╗██║     ██╔═══██╗██╔══██╗██╔════╝
+// ██║     ██║   ██║██║     ██║   ██║██████╔╝███████╗
+// ██║     ██║   ██║██║     ██║   ██║██╔══██╗╚════██║
+// ╚██████╗╚██████╔╝███████╗╚██████╔╝██║  ██║███████║
+//  ╚═════╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+
+// navbar
+$navbar-background-color: var(--navbar-background-color, #000000);
+$navbar-text-color: var(--navbar-text-color, rgb(218, 218, 218));
+
+// footer
+$footer-background-color: var(--footer-background-color, white);
+$footer-text-color: var(--footer-text-color, rgb(145, 145, 145));
+$banner-text-color: var(--banner-text-color, white);
+
+// icons
+$primary-icon-color: var(--primary-icon-color, #ffffff);
+$secondary-icon-color: var(--secondary-icon-color, #404040);
+
+// backgrounds
+$primary-background-color: var(--primary-background-color, #fafafa);
+$blue-background-color: var(--blue-background-color, #2196f3);
+$light-pink-gradient-background: var(--light-pink-gradient-background, linear-gradient(270deg, rgba(255, 99, 169, 0.308) 0%, rgba(223, 36, 151, 0.541) 100%));
+$dark-pink-gradient-background: var(--dark-pink-gradient-background, linear-gradient(270deg,rgba(255, 99, 169, 0.795) 0%, rgba(223, 36, 151, 0.795) 100%));
+$light-grey-gradient-background: var(--light-grey-gradient-background, linear-gradient(90deg, rgba(71, 71, 71, 0.445) 0%, rgba(136, 136, 136, 0.438) 67%, rgb(223, 223, 223) 100%));
+$gainsboro-gradient-background: var(--gainsboro-gradient-background, linear-gradient(90deg, rgba(204, 204, 204, 1) 0%, rgba(237, 237, 237, 1) 100% ));
+$yellow-gradient-background: var(--yellow-gradient-background, linear-gradient( 90deg, rgba(213, 162, 0, 0.795) 0%,rgba(255, 213, 79, 0.795) 100% ));
+$cyan-gradient-background: var(--cyan-gradient-background, linear-gradient(90deg, rgba(0, 127, 162, 1) 0%, rgba(0, 184, 235, 1) 35%, rgba(0, 212, 255, 1) 100%));
+$blue-twitter-gradient-background: var(--blue-twitter-gradient-background, linear-gradient(90deg,rgba(29, 161, 242, 1) 0%,rgb(95, 194, 255) 100%));
+$grey-geo-map-gradient-background: var(--grey-geo-map-gradient-background, radial-gradient(circle,rgba(215, 215, 215, 1) 0%, rgba(98, 98, 98, 1) 100%));
+$orange-gradient-background: var(--orange-gradient-background, linear-gradient(90deg,rgba(255, 150, 29, 0.795) 0%, rgba(231, 161, 21, 0.795) 67%, rgba(245, 203, 51, 0.795) 100%));
+$blue-gradient-background: var(--blue-gradient-background, linear-gradient(90deg, rgba(0, 90, 122, 0.79) 0%, rgba(0, 214, 218, 0.79) 100%));
+$green-gradient-background: var(--green-gradient-background, linear-gradient(180deg, rgba(16, 103, 24, 0.79) 0%, rgba(147, 245, 19, 0.79) 100% ));
+$light-pink-secondary-gradient-background: var(--light-pink-secondary-gradient-background, linear-gradient(to right, #752f72, #d69ed2));
+
+// text
+$primary-text-color: var(--primary-text-color, #404040);
+$secondary-text-color: var(--secondary-text-color, #ffffff);
+$card-text-color: var(--card-text-color, #818181);
+$card-secondary-text-color: var(--card-secondary-text-color, #585858);
+$misc-page-text-color: var(--misc-page-text-color, #000000);
+$system-requirements-text-color: var(--system-requirements-text-color, #555);
+
+// buttons
+$btn-magenta: var(--btn-magenta, rgb(223, 36, 152));
+$btn-cyan: var(--btn-cyan, rgb(0, 156, 199));
+$btn-grey: var(--btn-grey, rgb(126, 126, 126));
+$btn-pink: var(--btn-pink, rgba(255, 99, 169, 0.795));
+$btn-green: var(--btn-green, seagreen);
+$btn-orange: var(--btn-orange, rgb(185, 121, 0));
+$btn-blue: var(--btn-blue, rgb(0, 117, 153));
+$btn-blue-login: var(--btn-blue-login, #007bff);
+$btn-red: var(--btn-red, #dd2929);
+$btn-dark-grey: var(--btn-dark-grey, #646464);
+
+// forms
+$form-ctrl-border-color: var(--form-ctrl-border-color, rgb(201, 201, 201));
+$form-text-color: var(--form-text-color, rgb(133, 133, 133));
+$form-placeholder-color: var(--form-placeholder-color, rgb(190, 190, 190));
+
+// badges
+$pink-badge: var(--pink-badge, rgba(230, 69, 202, 0.795));
+$yellow-badge: var(--yellow-badge, rgba(213, 162, 0, 0.796));
+
+// general
+$warning: var(--warning, rgb(255, 100, 100));
+$success: var(--success, #238d1f);
+$unverified: var(--unverified, #2196f3);
+$border-color: var(--border-color, #cfcfcf);
+$checkbutton-active-color: var(--checkbutton-active-color, rgb(38, 209, 89));
+
+// legends
+$dark-pink-legend: var(--dark-pink-legend, #df2498);
+
+// ███████╗ ██████╗ ███╗   ██╗████████╗███████╗
+// ██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██╔════╝
+// █████╗  ██║   ██║██╔██╗ ██║   ██║   ███████╗
+// ██╔══╝  ██║   ██║██║╚██╗██║   ██║   ╚════██║
+// ██║     ╚██████╔╝██║ ╚████║   ██║   ███████║
+// ╚═╝      ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚══════╝
+
+$font-family: Helvetica, impact ,"avenir next", "Droid Sans", sans-serif, sans-serif;
+$medium-light-grey: var(--medium-light-grey, #a3a3a3);
+$btn-pink-bg: var(--btn-pink-bg, rgb(117, 47, 114));
+$btn-dark-pink-color: var(--btn-dark-pink-color, #000);
+
+
