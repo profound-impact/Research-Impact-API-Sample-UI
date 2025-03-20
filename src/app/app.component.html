@@ -1736,7 +1736,7 @@
           </div>
           <div class="ml-3">
             <p class="text-sm text-green-700">
-              Grant added successfully! ID: {{ addGrantSuccess().id }}
+              Grant added successfully! ID: {{ addGrantSuccess().grantId }}
               <span class="block mt-1 text-amber-600">
                 <i class="fas fa-info-circle mr-1"></i>
                 Note: AI processing is still running and will continue for
@@ -1753,73 +1753,6 @@
         *ngIf="addGrantSuccess()"
         class="bg-white shadow overflow-hidden sm:rounded-lg mb-8"
       >
-        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
-          <h3 class="text-lg leading-6 font-medium text-gray-900">
-            Added Grant Details
-          </h3>
-          <p class="mt-1 max-w-2xl text-sm text-gray-500">
-            Initial information. Area of Research data will be attached after AI
-            processing completes.
-          </p>
-        </div>
-
-        <div class="border-t border-gray-200">
-          <dl>
-            <div
-              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-            >
-              <dt class="text-sm font-medium text-gray-500">Grant ID</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {{ addGrantSuccess().grantId }}
-              </dd>
-            </div>
-            <div
-              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-            >
-              <dt class="text-sm font-medium text-gray-500">Title</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {{ addGrantSuccess().title }}
-              </dd>
-            </div>
-            <div
-              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-            >
-              <dt class="text-sm font-medium text-gray-500">Source</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {{ addGrantSuccess().source }}
-              </dd>
-            </div>
-            <div
-              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-            >
-              <dt class="text-sm font-medium text-gray-500">Created Date</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {{ addGrantSuccess().createdDateTime }}
-              </dd>
-            </div>
-            <div
-              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
-            >
-              <dt class="text-sm font-medium text-gray-500">Status</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                <span
-                  [ngClass]="{
-                    'px-2 py-1 text-xs font-semibold rounded-full': true,
-                    'bg-yellow-100 text-yellow-800':
-                      addGrantSuccess().status === 'Processing',
-                    'bg-green-100 text-green-800':
-                      addGrantSuccess().status === 'Open',
-                    'bg-red-100 text-red-800':
-                      addGrantSuccess().status === 'Closed'
-                  }"
-                >
-                  {{ addGrantSuccess().status || "Processing" }}
-                </span>
-              </dd>
-            </div>
-          </dl>
-        </div>
-
         <!-- Full JSON Response -->
         <div class="px-4 py-5 sm:px-6 bg-indigo-50 mt-4">
           <h4 class="text-md leading-6 font-medium text-gray-900">
@@ -1871,45 +1804,120 @@
         </div>
       </div>
 
-      <!-- Interactive content -->
       <div class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md">
-        <button
-          (click)="getGrantPdfUploadUrl(); setPdfFileNameWhenReceived()"
-          [disabled]="uploadUrlLoading()"
-          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-        >
-          <span *ngIf="!uploadUrlLoading()">Get Upload URL</span>
-          <span *ngIf="uploadUrlLoading()" class="flex items-center">
-            <svg
-              class="animate-spin -ml-1 mr-2 h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
+        <!-- Combined file selection and upload -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Select and Upload PDF File
+          </label>
+
+          <div class="flex flex-col space-y-2 max-w-xs">
+            <button
+              (click)="fileInput.click()"
+              [disabled]="uploadUrlLoading()"
+              class="inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors duration-150"
             >
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
+              <svg
+                *ngIf="!uploadUrlLoading() && !selectedGrantPdfFile"
+                class="w-5 h-5 mr-2"
+                fill="none"
                 stroke="currentColor"
-                stroke-width="4"
-              ></circle>
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            Getting URL...
-          </span>
-        </button>
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                ></path>
+              </svg>
+
+              <svg
+                *ngIf="!uploadUrlLoading() && selectedGrantPdfFile"
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+
+              <svg
+                *ngIf="uploadUrlLoading()"
+                class="animate-spin -ml-1 mr-2 h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+
+              <span *ngIf="!uploadUrlLoading() && !selectedGrantPdfFile">
+                Select & Upload PDF
+              </span>
+              <span
+                *ngIf="!uploadUrlLoading() && selectedGrantPdfFile"
+                class="truncate max-w-[180px]"
+              >
+                {{ selectedGrantPdfFile.name }}
+              </span>
+              <span *ngIf="uploadUrlLoading()"> Uploading... </span>
+            </button>
+
+            <!-- Hidden file input -->
+            <input
+              #fileInput
+              type="file"
+              id="grant-pdf-file"
+              accept=".pdf"
+              (change)="onFileSelectedAndUpload($event)"
+              class="hidden"
+            />
+
+            <p class="text-xs text-gray-500">
+              Click the button to select a PDF file. The file will be
+              automatically uploaded once selected.
+            </p>
+          </div>
+        </div>
 
         <!-- Display the URL when available -->
         <div *ngIf="uploadUrlResponse()" class="mt-4 p-4 bg-gray-50 rounded">
           <div class="mb-2">
-            <p class="text-sm font-medium text-gray-900">Upload URL:</p>
-            <p class="mt-1 text-sm text-gray-500 break-all">
-              {{ uploadUrlResponse()?.url }}
+            <p class="text-sm font-medium text-gray-900">Upload Status:</p>
+            <p class="mt-1 text-sm text-green-500">
+              <svg
+                class="inline-block h-5 w-5 mr-1"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              File uploaded successfully!
             </p>
           </div>
           <div>
@@ -1920,8 +1928,8 @@
           </div>
           <div class="mt-4">
             <p class="text-sm text-gray-600">
-              1. Use this URL to upload your PDF file via a PUT request.<br />
-              2. After uploading, proceed to Step 2 below to add the grant.
+              The file has been uploaded successfully. Please proceed to Step 2
+              below to add the grant.
             </p>
           </div>
         </div>
@@ -1931,7 +1939,25 @@
           *ngIf="uploadUrlError()"
           class="mt-4 p-4 bg-red-50 text-red-700 rounded"
         >
-          {{ uploadUrlError() }}
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg
+                class="h-5 w-5 text-red-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm">{{ uploadUrlError() }}</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2491,12 +2517,12 @@
         <!-- Success message -->
         <div
           *ngIf="addGrantPdfSuccess()"
-          class="mt-4 p-4 bg-green-50 border-l-4 border-green-500"
+          class="mt-6 p-4 bg-green-50 rounded-md"
         >
           <div class="flex">
             <div class="flex-shrink-0">
               <svg
-                class="h-5 w-5 text-green-500"
+                class="h-5 w-5 text-green-400"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -2509,15 +2535,11 @@
               </svg>
             </div>
             <div class="ml-3">
-              <p class="text-sm text-green-700">
-                Grant added successfully! ID: {{ addGrantPdfSuccess().id }}
-                <span class="block mt-1 text-amber-600">
-                  <i class="fas fa-info-circle mr-1"></i>
-                  Note: AI processing is still running and will continue for
-                  approximately 10 minutes. You can check the grant details
-                  after processing is complete.
-                </span>
-              </p>
+              <h3 class="text-sm font-medium text-green-800">Success!</h3>
+              <div class="mt-2 text-sm text-green-700">
+                <p>{{ addGrantPdfSuccess().message }}</p>
+                <p class="mt-1">Grant ID: {{ addGrantPdfSuccess().grantId }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -2525,7 +2547,7 @@
     </div>
 
     <!-- Search researchers -->
-    <div id="search-researchers">
+    <div id="search-researchers" class="max-w-9xl mx-auto mb-8 mt-8">
       <!-- Add the descriptive information here -->
       <div
         class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
@@ -2894,6 +2916,3241 @@
               Try adjusting your search criteria.
             </p>
           </div>
+        </div>
+      </div>
+    </div>
+    <div id="get-a-single-researcher" class="max-w-9xl mx-auto mb-8 mt-8">
+      <div class="bg-gray-50 rounded-lg border border-gray-200 p-4 mb-4">
+        <h2 class="text-xl font-semibold mb-2">Get a single researcher</h2>
+        <p class="text-gray-700 mb-2">
+          Retrieves detailed information about a specific researcher using its
+          unique identifier.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>
+            Endpoint:
+            <span class="font-mono">GET /researcher/{{'{{id}}'}}</span>
+          </p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/researcher/2766"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/researcher/2766</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Input for researcher ID and fetch button -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex items-end space-x-4">
+          <div class="flex-grow">
+            <label
+              for="researcherId"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Researcher ID:</label
+            >
+            <input
+              type="number"
+              id="researcherId"
+              #researcherIdInput
+              placeholder="Enter researcher ID"
+              class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          <button
+            (click)="getSingleResearcher(researcherIdInput.value)"
+            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            <span *ngIf="!singleResearcherLoading()">Fetch Researcher</span>
+            <span *ngIf="singleResearcherLoading()" class="flex items-center">
+              <svg
+                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Loading...
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Error message -->
+      <div
+        *ngIf="singleResearcherError()"
+        class="bg-red-50 border-l-4 border-red-500 p-4 mb-6"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-red-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700">{{ singleResearcherError() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Researcher details display -->
+      <div
+        *ngIf="singleResearcher() && !singleResearcherLoading()"
+        class="bg-white shadow overflow-hidden sm:rounded-lg mb-8"
+      >
+        <!-- Header -->
+        <div
+          class="px-4 py-5 sm:px-6 bg-indigo-50 flex justify-between items-center"
+        >
+          <div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+              Researcher #{{ singleResearcher().basic.id }}
+            </h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              {{ singleResearcher().basic.organization || "No organization" }}
+            </p>
+          </div>
+          <span
+            class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800"
+          >
+            {{ singleResearcher().basic.role || "Researcher" }}
+          </span>
+        </div>
+
+        <!-- Basic Information -->
+        <div class="border-t border-gray-200">
+          <dl>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Name</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleResearcher().basic.title || "" }}
+                {{ singleResearcher().basic.firstName }}
+                {{ singleResearcher().basic.lastName }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Email</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleResearcher().basic.email || "Not available" }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">LinkedIn</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <a
+                  *ngIf="singleResearcher().basic.linkedinUrl"
+                  [href]="singleResearcher().basic.linkedinUrl"
+                  target="_blank"
+                  class="text-indigo-600 hover:text-indigo-800"
+                >
+                  {{ singleResearcher().basic.linkedinUrl }}
+                </a>
+                <span *ngIf="!singleResearcher().basic.linkedinUrl"
+                  >Not available</span
+                >
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Location</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{
+                  filterNonEmpty([
+                    singleResearcher().basic.city,
+                    singleResearcher().basic.state,
+                    singleResearcher().basic.country
+                  ]).join(", ") || "Not specified"
+                }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Faculty</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleResearcher().basic.faculty || "Not specified" }}
+                <a
+                  *ngIf="singleResearcher().basic.facultyURL"
+                  [href]="singleResearcher().basic.facultyURL"
+                  target="_blank"
+                  class="ml-2 text-indigo-600 hover:text-indigo-800"
+                >
+                  (Website)
+                </a>
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Program</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleResearcher().basic.program || "Not specified" }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Biography</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{
+                  singleResearcher().basic.biography || "No biography available"
+                }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">
+                Research Interests
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{
+                  singleResearcher().basic.researchInterests || "None specified"
+                }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Areas of Research -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Areas of Research
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+          <div class="flex flex-wrap gap-2">
+            <span
+              *ngFor="let aor of singleResearcher().basic.areaOfResearches"
+              class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+            >
+              {{ aor }}
+            </span>
+            <span
+              *ngIf="!singleResearcher().basic.areaOfResearches?.length"
+              class="text-gray-500"
+            >
+              No areas of research specified
+            </span>
+          </div>
+        </div>
+
+        <!-- Keywords -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Keywords</h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+          <div class="flex flex-wrap gap-2">
+            <span
+              *ngFor="let keyword of singleResearcher().basic.keywords"
+              class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800"
+            >
+              {{ keyword }}
+            </span>
+            <span
+              *ngIf="!singleResearcher().basic.keywords?.length"
+              class="text-gray-500"
+            >
+              No keywords specified
+            </span>
+          </div>
+        </div>
+
+        <!-- Disciplines -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Disciplines
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+          <div class="flex flex-wrap gap-2">
+            <span
+              *ngFor="let discipline of singleResearcher().basic.disciplines"
+              class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"
+            >
+              {{ discipline }}
+            </span>
+            <span
+              *ngIf="!singleResearcher().basic.disciplines?.length"
+              class="text-gray-500"
+            >
+              No disciplines specified
+            </span>
+          </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Experience
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <div
+              *ngIf="!singleResearcher().experience?.length"
+              class="py-4 sm:py-5 sm:px-6"
+            >
+              <p class="text-gray-500">No experience information available</p>
+            </div>
+            <div
+              *ngFor="let exp of singleResearcher().experience"
+              class="py-4 sm:py-5 sm:px-6 border-b border-gray-200"
+            >
+              <div class="mb-2">
+                <h4 class="text-md font-medium text-indigo-600">
+                  {{ exp.title }}
+                </h4>
+                <p class="text-sm text-gray-700">
+                  {{ exp.organizationName
+                  }}{{ exp.department ? ", " + exp.department : "" }}
+                </p>
+                <p class="text-sm text-gray-500">{{ exp.duration }}</p>
+                <p class="text-sm text-gray-500">
+                  {{
+                    filterNonEmpty([
+                      $any(exp).city,
+                      $any(exp).state,
+                      $any(exp).country
+                    ]).join(", ")
+                  }}
+                </p>
+              </div>
+              <p class="text-sm mt-2">
+                {{ exp.summary || "No description available" }}
+              </p>
+              <div class="mt-2 flex items-center space-x-2">
+                <span class="text-xs px-2 py-1 bg-gray-100 rounded-full">{{
+                  exp.type || "Not specified"
+                }}</span>
+                <span class="text-xs px-2 py-1 bg-gray-100 rounded-full">{{
+                  exp.industry || "Not specified"
+                }}</span>
+              </div>
+              <div class="mt-2">
+                <a
+                  *ngIf="exp.organizationUrl"
+                  [href]="exp.organizationUrl"
+                  target="_blank"
+                  class="text-xs text-indigo-600 hover:text-indigo-800"
+                >
+                  Organization Website
+                </a>
+                <a
+                  *ngIf="exp.organizationLinkedinUrl"
+                  [href]="exp.organizationLinkedinUrl"
+                  target="_blank"
+                  class="ml-3 text-xs text-indigo-600 hover:text-indigo-800"
+                >
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Education Section -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Education</h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <div
+              *ngIf="!singleResearcher().education?.length"
+              class="py-4 sm:py-5 sm:px-6"
+            >
+              <p class="text-gray-500">No education information available</p>
+            </div>
+            <div
+              *ngFor="let edu of singleResearcher().education"
+              class="py-4 sm:py-5 sm:px-6 border-b border-gray-200"
+            >
+              <div class="mb-2">
+                <h4 class="text-md font-medium text-indigo-600">
+                  {{ edu.degree }}{{ edu.major ? " in " + edu.major : "" }}
+                </h4>
+                <p class="text-sm text-gray-700">{{ edu.instituteName }}</p>
+                <p class="text-sm text-gray-500">
+                  {{
+                    edu.isCurrent
+                      ? "Currently enrolled"
+                      : edu.graduationDate || "Dates not specified"
+                  }}
+                </p>
+                <p class="text-sm text-gray-500">
+                  {{
+                    filterNonEmpty([edu.city, edu.state, edu.country]).join(
+                      ", "
+                    )
+                  }}
+                </p>
+              </div>
+              <p class="text-sm mt-2">
+                {{ edu.summary || "No description available" }}
+              </p>
+              <div *ngIf="edu.grade" class="mt-2">
+                <span class="text-xs font-medium">Grade: </span>
+                <span class="text-xs">{{ edu.grade }}</span>
+              </div>
+              <div class="mt-2">
+                <a
+                  *ngIf="edu.institutionUrl"
+                  [href]="edu.institutionUrl"
+                  target="_blank"
+                  class="text-xs text-indigo-600 hover:text-indigo-800"
+                >
+                  Institution Website
+                </a>
+                <a
+                  *ngIf="edu.instituteLinkedinUrl"
+                  [href]="edu.instituteLinkedinUrl"
+                  target="_blank"
+                  class="ml-3 text-xs text-indigo-600 hover:text-indigo-800"
+                >
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Publications Section -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Publications
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <div
+              *ngIf="!singleResearcher().publications?.length"
+              class="py-4 sm:py-5 sm:px-6"
+            >
+              <p class="text-gray-500">No publication information available</p>
+            </div>
+            <div
+              *ngFor="let pub of singleResearcher().publications"
+              class="py-4 sm:py-5 sm:px-6 border-b border-gray-200"
+            >
+              <div class="mb-2">
+                <h4 class="text-md font-medium text-indigo-600">
+                  {{ pub.publicationTitle }}
+                </h4>
+                <p class="text-sm text-gray-700">{{ pub.publisher }}</p>
+                <p class="text-sm text-gray-500">
+                  Published: {{ pub.publishedOn }}
+                </p>
+                <div class="flex mt-1 space-x-2">
+                  <span
+                    class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full"
+                  >
+                    {{ pub.publicationCategory || "No category" }}
+                  </span>
+                  <span
+                    class="text-xs px-2 py-1 rounded-full"
+                    [ngClass]="{
+                      'bg-green-100 text-green-800':
+                        pub.publicationStatus === 'Published',
+                      'bg-yellow-100 text-yellow-800':
+                        pub.publicationStatus === 'In Progress',
+                      'bg-gray-100 text-gray-800': !pub.publicationStatus
+                    }"
+                  >
+                    {{ pub.publicationStatus || "Status unknown" }}
+                  </span>
+                </div>
+              </div>
+              <p class="text-sm mt-2">
+                {{ pub.summary || "No summary available" }}
+              </p>
+              <div class="mt-2">
+                <a
+                  *ngIf="pub.publicationUrl"
+                  [href]="pub.publicationUrl"
+                  resertarget="_blank"
+                  class="text-xs text-indigo-600 hover:text-indigo-800"
+                >
+                  View Publication
+                </a>
+              </div>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div id="add-researcher-by-parameters" class="max-w-9xl mx-auto mb-8 mt-8">
+      <!-- Descriptive Information -->
+      <div
+        class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+      >
+        <h2 class="text-xl font-semibold mb-2">Add researcher by parameters</h2>
+        <p class="text-gray-700 mb-2">
+          Adds a new researcher to the system by providing structured parameters
+          including triggering the AI stack and Area of Research(AOR)
+          attachment.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>Endpoint: <span class="font-mono">POST /researcher</span></p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/researcher"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/researcher</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Form Container -->
+      <div class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <form
+          [formGroup]="addResearcherForm"
+          class="space-y-6"
+          (ngSubmit)="addResearcherByParameters()"
+        >
+          <!-- Basic Information -->
+          <div class="mb-6" formGroupName="basic">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Basic Information
+            </h3>
+
+            <!-- First row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="space-y-2">
+                <label
+                  for="title"
+                  class="block text-sm font-medium text-gray-700"
+                  >Title</label
+                >
+                <select
+                  id="title"
+                  formControlName="title"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="">Select title</option>
+                  <option value="Dr.">Dr.</option>
+                  <option value="Prof.">Prof.</option>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Mrs.">Mrs.</option>
+                  <option value="Ms.">Ms.</option>
+                </select>
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="firstName"
+                  class="block text-sm font-medium text-gray-700"
+                  >First Name *</label
+                >
+                <input
+                  type="text"
+                  id="firstName"
+                  formControlName="firstName"
+                  placeholder="Enter first name"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="middleName"
+                  class="block text-sm font-medium text-gray-700"
+                  >Middle Name</label
+                >
+                <input
+                  type="text"
+                  id="middleName"
+                  formControlName="middleName"
+                  placeholder="Enter middle name"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Second row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+              <div class="space-y-2">
+                <label
+                  for="lastName"
+                  class="block text-sm font-medium text-gray-700"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  id="lastName"
+                  formControlName="lastName"
+                  placeholder="Enter last name"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="email"
+                  class="block text-sm font-medium text-gray-700"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  formControlName="email"
+                  placeholder="Enter email address"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="gender"
+                  class="block text-sm font-medium text-gray-700"
+                  >Gender</label
+                >
+                <select
+                  id="gender"
+                  formControlName="gender"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Non-binary">Non-binary</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Third row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              <div class="space-y-2">
+                <label
+                  for="linkedinUrl"
+                  class="block text-sm font-medium text-gray-700"
+                  >LinkedIn URL</label
+                >
+                <input
+                  type="text"
+                  id="linkedinUrl"
+                  formControlName="linkedinUrl"
+                  placeholder="Enter LinkedIn profile URL"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="researchInterests"
+                  class="block text-sm font-medium text-gray-700"
+                  >Research Interests</label
+                >
+                <input
+                  type="text"
+                  id="researchInterests"
+                  formControlName="researchInterests"
+                  placeholder="Enter research interests"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Fourth row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+              <div class="space-y-2">
+                <label
+                  for="faculty"
+                  class="block text-sm font-medium text-gray-700"
+                  >Faculty</label
+                >
+                <input
+                  type="text"
+                  id="faculty"
+                  formControlName="faculty"
+                  placeholder="Enter faculty"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="program"
+                  class="block text-sm font-medium text-gray-700"
+                  >Program</label
+                >
+                <input
+                  type="text"
+                  id="program"
+                  formControlName="program"
+                  placeholder="Enter program"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="role"
+                  class="block text-sm font-medium text-gray-700"
+                  >Role</label
+                >
+                <input
+                  type="text"
+                  id="role"
+                  formControlName="role"
+                  placeholder="Enter role"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Fifth row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              <div class="space-y-2">
+                <label
+                  for="organization"
+                  class="block text-sm font-medium text-gray-700"
+                  >Organization</label
+                >
+                <input
+                  type="text"
+                  id="organization"
+                  formControlName="organization"
+                  placeholder="Enter organization"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="facultyURL"
+                  class="block text-sm font-medium text-gray-700"
+                  >Faculty URL</label
+                >
+                <input
+                  type="text"
+                  id="facultyURL"
+                  formControlName="facultyURL"
+                  placeholder="Enter faculty URL"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Sixth row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+              <div class="space-y-2">
+                <label
+                  for="country"
+                  class="block text-sm font-medium text-gray-700"
+                  >Country</label
+                >
+                <input
+                  type="text"
+                  id="country"
+                  formControlName="country"
+                  placeholder="Enter country"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="state"
+                  class="block text-sm font-medium text-gray-700"
+                  >State/Province</label
+                >
+                <input
+                  type="text"
+                  id="state"
+                  formControlName="state"
+                  placeholder="Enter state or province"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  for="city"
+                  class="block text-sm font-medium text-gray-700"
+                  >City</label
+                >
+                <input
+                  type="text"
+                  id="city"
+                  formControlName="city"
+                  placeholder="Enter city"
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Biography -->
+            <div class="mt-4 space-y-2">
+              <label
+                for="biography"
+                class="block text-sm font-medium text-gray-700"
+                >Biography</label
+              >
+              <textarea
+                id="biography"
+                formControlName="biography"
+                placeholder="Enter biography"
+                rows="3"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              ></textarea>
+            </div>
+
+            <!-- Keywords -->
+            <div class="mt-4">
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Keywords</label
+                >
+                <button
+                  type="button"
+                  (click)="addBasicArrayItem('basic.keywords')"
+                  class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <svg
+                    class="h-4 w-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    ></path>
+                  </svg>
+                  Add Keyword
+                </button>
+              </div>
+
+              <div formArrayName="keywords" class="space-y-2">
+                <div
+                  *ngFor="
+                    let keyword of basicKeywordsArray.controls;
+                    let i = index
+                  "
+                  class="flex space-x-2"
+                >
+                  <input
+                    [formControlName]="i"
+                    placeholder="Enter keyword"
+                    class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  <button
+                    *ngIf="basicKeywordsArray.length > 1"
+                    type="button"
+                    (click)="removeBasicArrayItem('basic.keywords', i)"
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Areas of Research -->
+            <div class="mt-4">
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Areas of Research</label
+                >
+                <button
+                  type="button"
+                  (click)="addBasicArrayItem('basic.areaOfResearches')"
+                  class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <svg
+                    class="h-4 w-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    ></path>
+                  </svg>
+                  Add Area of Research
+                </button>
+              </div>
+
+              <div formArrayName="areaOfResearches" class="space-y-2">
+                <div
+                  *ngFor="
+                    let area of basicAreaOfResearchesArray.controls;
+                    let i = index
+                  "
+                  class="flex space-x-2"
+                >
+                  <input
+                    [formControlName]="i"
+                    placeholder="Enter area of research"
+                    class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  <button
+                    *ngIf="basicAreaOfResearchesArray.length > 1"
+                    type="button"
+                    (click)="removeBasicArrayItem('basic.areaOfResearches', i)"
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Disciplines -->
+            <div class="mt-4">
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Disciplines</label
+                >
+                <button
+                  type="button"
+                  (click)="addBasicArrayItem('basic.disciplines')"
+                  class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <svg
+                    class="h-4 w-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    ></path>
+                  </svg>
+                  Add Discipline
+                </button>
+              </div>
+
+              <div formArrayName="disciplines" class="space-y-2">
+                <div
+                  *ngFor="
+                    let discipline of basicDisciplinesArray.controls;
+                    let i = index
+                  "
+                  class="flex space-x-2"
+                >
+                  <input
+                    [formControlName]="i"
+                    placeholder="Enter discipline"
+                    class="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  <button
+                    *ngIf="basicDisciplinesArray.length > 1"
+                    type="button"
+                    (click)="removeBasicArrayItem('basic.disciplines', i)"
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Section -->
+          <div class="border-t border-gray-200 pt-4">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-900">Experience</h3>
+              <button
+                type="button"
+                (click)="toggleExperienceSection()"
+                class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <svg
+                  class="h-4 w-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+                {{
+                  showExperienceSection() ? "Hide Experience" : "Add Experience"
+                }}
+              </button>
+            </div>
+
+            <!-- Experience form array - only shown when showExperienceSection is true -->
+            <div
+              *ngIf="showExperienceSection()"
+              formArrayName="experience"
+              class="space-y-4"
+            >
+              <div
+                *ngFor="let exp of experienceArray.controls; let i = index"
+                [formGroupName]="i"
+                class="p-4 border border-gray-200 rounded-md"
+              >
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-medium">Experience #{{ i + 1 }}</span>
+                  <button
+                    type="button"
+                    (click)="removeExperience(i)"
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Job Title <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="title"
+                      placeholder="Enter job title"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      [ngClass]="{
+                        'border-red-500':
+                          exp.get('title')?.invalid && exp.get('title')?.touched
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        exp.get('title')?.invalid && exp.get('title')?.touched
+                      "
+                      class="text-red-500 text-xs mt-1"
+                    >
+                      Job title is required
+                    </div>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Organization Name <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="organizationName"
+                      placeholder="Enter organization name"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      [ngClass]="{
+                        'border-red-500':
+                          exp.get('organizationName')?.invalid &&
+                          exp.get('organizationName')?.touched
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        exp.get('organizationName')?.invalid &&
+                        exp.get('organizationName')?.touched
+                      "
+                      class="text-red-500 text-xs mt-1"
+                    >
+                      Organization name is required
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Employment Type
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="type"
+                      placeholder="e.g., Full-time, Part-time, Contract"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Industry
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="industry"
+                      placeholder="Enter industry"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Department
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="department"
+                      placeholder="Enter department"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Organization Website
+                    </label>
+                    <input
+                      type="url"
+                      formControlName="organizationUrl"
+                      placeholder="Enter organization website"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Start Date
+                    </label>
+                    <input
+                      type="date"
+                      [value]="
+                        formatDateForInput(
+                          exp.get('startYear')?.value,
+                          exp.get('startMonth')?.value,
+                          exp.get('startDay')?.value
+                        )
+                      "
+                      (change)="updateExperienceStartDate($event, i)"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      End Date
+                    </label>
+                    <div class="flex items-center">
+                      <input
+                        type="date"
+                        [value]="
+                          formatDateForInput(
+                            exp.get('endYear')?.value,
+                            exp.get('endMonth')?.value,
+                            exp.get('endDay')?.value
+                          )
+                        "
+                        (change)="updateExperienceEndDate($event, i)"
+                        [disabled]="exp.get('isCurrent')?.value"
+                        class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      />
+                    </div>
+                    <div class="flex items-center mt-2">
+                      <input
+                        type="checkbox"
+                        id="expIsCurrent-{{ i }}"
+                        formControlName="isCurrent"
+                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                      />
+                      <label
+                        for="expIsCurrent-{{ i }}"
+                        class="ml-2 block text-sm text-gray-700"
+                      >
+                        I currently work here
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Country
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="country"
+                      placeholder="Enter country"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      State/Province
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="state"
+                      placeholder="Enter state/province"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="city"
+                      placeholder="Enter city"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div class="mt-4 space-y-2">
+                  <label class="block text-sm font-medium text-gray-700">
+                    LinkedIn URL
+                  </label>
+                  <input
+                    type="url"
+                    formControlName="organizationLinkedinUrl"
+                    placeholder="Enter organization LinkedIn URL"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+
+                <div class="mt-4 space-y-2">
+                  <label class="block text-sm font-medium text-gray-700">
+                    Summary
+                  </label>
+                  <textarea
+                    formControlName="summary"
+                    placeholder="Describe your responsibilities and achievements"
+                    rows="3"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- Button to add another experience -->
+              <button
+                type="button"
+                (click)="addExperience()"
+                class="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <svg
+                  class="h-4 w-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+                Add Another Experience
+              </button>
+            </div>
+          </div>
+
+          <!-- Education Section -->
+          <div class="border-t border-gray-200 pt-4">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-900">Education</h3>
+              <button
+                type="button"
+                (click)="toggleEducationSection()"
+                class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <svg
+                  class="h-4 w-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+                {{
+                  showEducationSection() ? "Hide Education" : "Add Education"
+                }}
+              </button>
+            </div>
+
+            <div
+              *ngIf="showEducationSection()"
+              formArrayName="education"
+              class="space-y-4"
+            >
+              <div
+                *ngFor="let edu of educationArray.controls; let i = index"
+                [formGroupName]="i"
+                class="p-4 border border-gray-200 rounded-md"
+              >
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-medium">Education #{{ i + 1 }}</span>
+                  <button
+                    *ngIf="educationArray.length > 1"
+                    type="button"
+                    (click)="removeEducation(i)"
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Institution Name <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="instituteName"
+                      placeholder="Enter institution name"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      [ngClass]="{
+                        'border-red-500':
+                          edu.get('instituteName')?.invalid &&
+                          edu.get('instituteName')?.touched
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        edu.get('instituteName')?.invalid &&
+                        edu.get('instituteName')?.touched
+                      "
+                      class="text-red-500 text-xs mt-1"
+                    >
+                      Institution name is required
+                    </div>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Degree <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="degree"
+                      placeholder="Enter degree"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      [ngClass]="{
+                        'border-red-500':
+                          edu.get('degree')?.invalid &&
+                          edu.get('degree')?.touched
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        edu.get('degree')?.invalid && edu.get('degree')?.touched
+                      "
+                      class="text-red-500 text-xs mt-1"
+                    >
+                      Degree is required
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Major</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="major"
+                      placeholder="Enter major"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Grade</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="grade"
+                      placeholder="Enter grade"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Start Date
+                    </label>
+                    <input
+                      type="date"
+                      [value]="
+                        formatDateForInput(
+                          edu.get('startYear')?.value,
+                          edu.get('startMonth')?.value,
+                          edu.get('startDay')?.value
+                        )
+                      "
+                      (change)="updateEducationStartDate($event, i)"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      End Date
+                    </label>
+                    <div class="flex items-center">
+                      <input
+                        type="date"
+                        [value]="
+                          formatDateForInput(
+                            edu.get('endYear')?.value,
+                            edu.get('endMonth')?.value,
+                            edu.get('endDay')?.value
+                          )
+                        "
+                        (change)="updateEducationEndDate($event, i)"
+                        [disabled]="edu.get('isCurrent')?.value"
+                        class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      />
+                    </div>
+                    <div class="flex items-center mt-2">
+                      <input
+                        type="checkbox"
+                        id="isCurrent-{{ i }}"
+                        formControlName="isCurrent"
+                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                      />
+                      <label
+                        for="isCurrent-{{ i }}"
+                        class="ml-2 block text-sm text-gray-700"
+                      >
+                        Currently studying here
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Institution Website
+                    </label>
+                    <input
+                      type="url"
+                      formControlName="institutionUrl"
+                      placeholder="Enter institution website"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Institution LinkedIn
+                    </label>
+                    <input
+                      type="url"
+                      formControlName="instituteLinkedinUrl"
+                      placeholder="Enter institution LinkedIn URL"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      Country
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="country"
+                      placeholder="Enter country"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
+                      State/Province
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="state"
+                      placeholder="Enter state/province"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >City</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="city"
+                      placeholder="Enter city"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div class="mt-4 space-y-2">
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Summary</label
+                  >
+                  <textarea
+                    formControlName="summary"
+                    placeholder="Enter a summary of your education"
+                    rows="2"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- Button to add another education entry -->
+              <button
+                type="button"
+                (click)="addEducation()"
+                class="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <svg
+                  class="h-4 w-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+                Add Another Education
+              </button>
+            </div>
+          </div>
+
+          <!-- Publications Section -->
+          <div class="border-t border-gray-200 pt-4">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-900">Publications</h3>
+              <button
+                type="button"
+                (click)="togglePublicationsSection()"
+                class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <svg
+                  class="h-4 w-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+                {{
+                  showPublicationsSection()
+                    ? "Hide Publications"
+                    : "Add Publication"
+                }}
+              </button>
+            </div>
+
+            <div
+              *ngIf="showPublicationsSection()"
+              formArrayName="publications"
+              class="space-y-4"
+            >
+              <div
+                *ngFor="let pub of publicationsArray.controls; let i = index"
+                [formGroupName]="i"
+                class="p-4 border border-gray-200 rounded-md"
+              >
+                <div class="flex justify-between items-center mb-2">
+                  <span class="font-medium">Publication #{{ i + 1 }}</span>
+                  <button
+                    *ngIf="publicationsArray.length > 1"
+                    type="button"
+                    (click)="removePublication(i)"
+                    class="text-red-600 hover:text-red-800"
+                  >
+                    <svg
+                      class="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-sm font-medium text-gray-700">
+                    Title <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    formControlName="title"
+                    placeholder="Enter publication title"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    [ngClass]="{
+                      'border-red-500':
+                        pub.get('title')?.invalid && pub.get('title')?.touched
+                    }"
+                  />
+                  <div
+                    *ngIf="
+                      pub.get('title')?.invalid && pub.get('title')?.touched
+                    "
+                    class="text-red-500 text-xs mt-1"
+                  >
+                    Publication title is required
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Status</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="status"
+                      placeholder="e.g., Published, In Press"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Publisher</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="publisher"
+                      placeholder="e.g., Springer, IEEE"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Type</label
+                    >
+                    <input
+                      type="text"
+                      formControlName="type"
+                      placeholder="e.g., Journal Article, Conference Paper"
+                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div class="mt-4 space-y-2">
+                  <label class="block text-sm font-medium text-gray-700"
+                    >URL</label
+                  >
+                  <input
+                    type="url"
+                    formControlName="url"
+                    placeholder="Enter publication URL"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+
+                <div class="mt-4 space-y-2">
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Publication Date</label
+                  >
+                  <input
+                    type="date"
+                    [value]="
+                      formatDateForInput(
+                        pub.get('publishedYear')?.value,
+                        pub.get('publishedMonth')?.value,
+                        pub.get('publishedDay')?.value
+                      )
+                    "
+                    (change)="updatePublicationDate($event, i)"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+
+                <div class="mt-4 space-y-2">
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Summary</label
+                  >
+                  <textarea
+                    formControlName="summary"
+                    placeholder="Enter publication summary"
+                    rows="2"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- Button to add another publication -->
+              <button
+                type="button"
+                (click)="addPublication()"
+                class="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <svg
+                  class="h-4 w-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+                Add Another Publication
+              </button>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="mt-6 flex justify-center space-x-3">
+            <button
+              type="submit"
+              [disabled]="addResearcherForm.invalid || addResearcherLoading()"
+              [class.opacity-50]="
+                addResearcherForm.invalid || addResearcherLoading()
+              "
+              [class.cursor-not-allowed]="
+                addResearcherForm.invalid || addResearcherLoading()
+              "
+              class="inline-flex justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <svg
+                *ngIf="addResearcherLoading()"
+                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              {{
+                addResearcherLoading()
+                  ? "Adding Researcher..."
+                  : "Add Researcher"
+              }}
+            </button>
+            <button
+              type="button"
+              (click)="resetAddResearcherForm()"
+              class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Reset
+            </button>
+          </div>
+
+          <!-- Success/Error Messages -->
+          <div
+            *ngIf="addResearcherSuccess() || addResearcherError()"
+            class="mt-4"
+          >
+            <div
+              *ngIf="addResearcherSuccess()"
+              class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg"
+              role="alert"
+            >
+              <div class="font-medium">
+                {{ addResearcherSuccess().message }}
+              </div>
+              <div>
+                Researcher has been added successfully with ID:
+                {{ addResearcherSuccess().researcherId }}
+              </div>
+            </div>
+
+            <div
+              *ngIf="addResearcherError()"
+              class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+              role="alert"
+            >
+              <div class="font-medium">Error!</div>
+              <div>{{ addResearcherError() }}</div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- ! Add Researcher by PDF -->
+    <div id="add-researcher-by-pdf" class="max-w-9xl mx-auto mb-8 mt-8">
+      <div
+        class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+      >
+        <h2 class="text-xl font-semibold mb-2">Add researcher by PDF</h2>
+        <p class="text-gray-700 mb-2">
+          Adds a new researcher to the system by providing structured parameters
+          and a PDF file including triggering the AI stack and Area of
+          Research(AOR) attachment. Adding a researcher by PDF includes 2 steps.
+        </p>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">
+          Step 1: Get PDF upload URL and file Id
+        </h3>
+        <p class="text-gray-700 mb-2">
+          Retrieves a temporary URL and file ID to upload the PDF file
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>
+            Endpoint:
+            <span class="font-mono">GET /uploadURL/researcher/pdf</span>
+          </p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/uploadURL/researcher/pdf"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/uploadURL/researcher/pdf</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <div class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <!-- Combined file selection and upload -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Select and Upload PDF File
+          </label>
+
+          <div class="flex flex-col space-y-2 max-w-xs">
+            <button
+              (click)="researcherFileInput.click()"
+              [disabled]="researcherUploadUrlLoading()"
+              class="inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors duration-150"
+            >
+              <svg
+                *ngIf="
+                  !researcherUploadUrlLoading() && !selectedResearcherPdfFile
+                "
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                ></path>
+              </svg>
+
+              <svg
+                *ngIf="
+                  !researcherUploadUrlLoading() && selectedResearcherPdfFile
+                "
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+
+              <svg
+                *ngIf="researcherUploadUrlLoading()"
+                class="animate-spin -ml-1 mr-2 h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+
+              <span
+                *ngIf="
+                  !researcherUploadUrlLoading() && !selectedResearcherPdfFile
+                "
+              >
+                Select & Upload PDF
+              </span>
+              <span
+                *ngIf="
+                  !researcherUploadUrlLoading() && selectedResearcherPdfFile
+                "
+                class="truncate max-w-[180px]"
+              >
+                {{ selectedResearcherPdfFile.name }}
+              </span>
+              <span *ngIf="researcherUploadUrlLoading()"> Uploading... </span>
+            </button>
+
+            <!-- Hidden file input -->
+            <input
+              #researcherFileInput
+              type="file"
+              id="researcher-pdf-file"
+              accept=".pdf"
+              (change)="onResearcherFileSelectedAndUpload($event)"
+              class="hidden"
+            />
+
+            <p class="text-xs text-gray-500">
+              Click the button to select a PDF file. The file will be
+              automatically uploaded once selected.
+            </p>
+          </div>
+        </div>
+
+        <!-- Display the URL when available -->
+        <div
+          *ngIf="researcherUploadUrlResponse()"
+          class="mt-4 p-4 bg-gray-50 rounded"
+        >
+          <div class="mb-2">
+            <p class="text-sm font-medium text-gray-900">Upload Status:</p>
+            <p class="mt-1 text-sm text-green-500">
+              <svg
+                class="inline-block h-5 w-5 mr-1"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              File uploaded successfully!
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-900">File ID:</p>
+            <p class="mt-1 text-sm text-gray-500">
+              {{ researcherUploadUrlResponse()?.fileId }}
+            </p>
+          </div>
+          <div class="mt-4">
+            <p class="text-sm text-gray-600">
+              The file has been uploaded successfully. Please proceed to Step 2
+              below to add the researcher.
+            </p>
+          </div>
+        </div>
+
+        <!-- Display error if any -->
+        <div
+          *ngIf="researcherUploadUrlError()"
+          class="mt-4 p-4 bg-red-50 text-red-700 rounded"
+        >
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg
+                class="h-5 w-5 text-red-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm">{{ researcherUploadUrlError() }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 Description -->
+      <div
+        *ngIf="researcherUploadUrlResponse()"
+        class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200 mt-8"
+      >
+        <h3 class="text-lg font-medium text-gray-900 mb-2">
+          Step 2: Add researcher by PDF file ID
+        </h3>
+        <p class="text-gray-700 mb-2">
+          After successfully uploading the PDF file, use the returned file ID to
+          add a new researcher to the system.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>Endpoint: <span class="font-mono">POST /researcher/pdf</span></p>
+          <p>
+            Endpoint example:
+            <a
+              href="https://api.research.profoundimpact.com/v1/researcher/pdf"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/researcher/pdf</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Form Container -->
+      <div
+        *ngIf="researcherUploadUrlResponse()"
+        class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md"
+      >
+        <form
+          [formGroup]="addResearcherPdfForm"
+          (ngSubmit)="addResearcherByPdf()"
+          class="space-y-6"
+        >
+          <!-- Basic Information -->
+          <div class="mb-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Basic Information
+            </h3>
+
+            <div formGroupName="basic" class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="space-y-2">
+                  <label
+                    for="title"
+                    class="block text-sm font-medium text-gray-700"
+                    >Title</label
+                  >
+                  <select
+                    id="title"
+                    formControlName="title"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    <option value="">Select title</option>
+                    <option value="Dr.">Dr.</option>
+                    <option value="Prof.">Prof.</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Ms.">Ms.</option>
+                  </select>
+                </div>
+                <div class="space-y-2">
+                  <label
+                    for="firstName"
+                    class="block text-sm font-medium text-gray-700"
+                    >First Name *</label
+                  >
+                  <input
+                    type="text"
+                    id="firstName"
+                    formControlName="firstName"
+                    placeholder="Enter first name"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    for="lastName"
+                    class="block text-sm font-medium text-gray-700"
+                    >Last Name</label
+                  >
+                  <input
+                    type="text"
+                    id="lastName"
+                    formControlName="lastName"
+                    placeholder="Enter last name"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                  <label
+                    for="email"
+                    class="block text-sm font-medium text-gray-700"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    id="email"
+                    formControlName="email"
+                    placeholder="Enter email address"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    for="linkedinUrl"
+                    class="block text-sm font-medium text-gray-700"
+                    >LinkedIn URL</label
+                  >
+                  <input
+                    type="text"
+                    id="linkedinUrl"
+                    formControlName="linkedinUrl"
+                    placeholder="Enter LinkedIn profile URL"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="space-y-2">
+                  <label
+                    for="country"
+                    class="block text-sm font-medium text-gray-700"
+                    >Country</label
+                  >
+                  <input
+                    type="text"
+                    id="country"
+                    formControlName="country"
+                    placeholder="Enter country"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    for="state"
+                    class="block text-sm font-medium text-gray-700"
+                    >State/Province</label
+                  >
+                  <input
+                    type="text"
+                    id="state"
+                    formControlName="state"
+                    placeholder="Enter state or province"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    for="city"
+                    class="block text-sm font-medium text-gray-700"
+                    >City</label
+                  >
+                  <input
+                    type="text"
+                    id="city"
+                    formControlName="city"
+                    placeholder="Enter city"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="pdfFileName"
+                  class="block text-sm font-medium text-gray-700"
+                  >PDF File Name *</label
+                >
+                <input
+                  type="text"
+                  id="pdfFileName"
+                  formControlName="pdfFileName"
+                  placeholder="Enter PDF file name"
+                  readonly
+                  class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit buttons -->
+          <div class="flex justify-center gap-4 pt-4">
+            <button
+              type="submit"
+              [disabled]="
+                addResearcherPdfLoading() || addResearcherPdfForm.invalid
+              "
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            >
+              <span *ngIf="addResearcherPdfLoading()">
+                <svg
+                  class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Adding Researcher...
+              </span>
+              <span *ngIf="!addResearcherPdfLoading()"
+                >Add Researcher with PDF</span
+              >
+            </button>
+            <button
+              type="button"
+              (click)="resetAddResearcherPdfForm()"
+              class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Reset Form
+            </button>
+          </div>
+        </form>
+
+        <!-- Error message -->
+        <div
+          *ngIf="addResearcherPdfError()"
+          class="mt-4 p-4 bg-red-50 border-l-4 border-red-500"
+        >
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg
+                class="h-5 w-5 text-red-500"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-700">{{ addResearcherPdfError() }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success message -->
+        <!-- Add this after the form in the Add Researcher by PDF section -->
+        <div
+          *ngIf="addResearcherPdfSuccess()"
+          class="mt-6 p-4 bg-green-50 rounded-md"
+        >
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg
+                class="h-5 w-5 text-green-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-green-800">Success!</h3>
+              <div class="mt-2 text-sm text-green-700">
+                <p>{{ addResearcherPdfSuccess().message }}</p>
+                <p class="mt-1">
+                  Researcher ID: {{ addResearcherPdfSuccess().researcherId }}
+                </p>
+              </div>
+              <div class="mt-4">
+                <button
+                  type="button"
+                  (click)="resetAddResearcherPdfForm()"
+                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Add Another Researcher
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search matches -->
+    <div id="search-matches">
+      <!-- Header Section -->
+      <div
+        class="max-w-9xl mx-auto mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+      >
+        <h2 class="text-xl font-semibold mb-2">Search Matches</h2>
+        <p class="text-gray-700 mb-2">
+          Retrieves detailed information about matches between researchers and
+          grants using filters. Values in each field use "OR" logic, fields use
+          "AND" logic between them.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>Endpoint: <span class="font-mono">POST /match/search</span></p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/match/search"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/match/search</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Form Section -->
+      <div class="max-w-9xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        <form
+          [formGroup]="matchSearchForm"
+          class="space-y-6"
+          (ngSubmit)="searchForMatches()"
+        >
+          <div>Use semicolon (;) to enter multiple search phrases</div>
+
+          <!-- First row -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label
+                for="researcherIds"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Researcher IDs:
+              </label>
+              <input
+                type="text"
+                id="researcherIds"
+                formControlName="researcherIds"
+                placeholder="E.g., 1019; 1020; 1016"
+                pattern="^[0-9;]*$"
+                (input)="sanitizeResearcherIdsInput($event)"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div class="space-y-2">
+              <label
+                for="grantIds"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Grant IDs:
+              </label>
+              <input
+                type="text"
+                id="grantIds"
+                formControlName="grantIds"
+                placeholder="E.g., 78990; 78963"
+                pattern="^[0-9;]*$"
+                (input)="sanitizeResearcherIdsInput($event)"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Second row -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label
+                for="grantSources"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Grant Sources:
+              </label>
+              <input
+                type="text"
+                id="grantSources"
+                formControlName="grantSources"
+                placeholder="E.g., Canadian Institutes of Health Research; NSERC"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div class="space-y-2">
+              <label
+                for="grantTitles"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Grant Titles:
+              </label>
+              <input
+                type="text"
+                id="grantTitles"
+                formControlName="grantTitles"
+                placeholder="E.g., Research Grant; Development Fund"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Third row -->
+          <div class="grid grid-cols-1 gap-6">
+            <div class="space-y-2">
+              <label
+                for="researcherNames"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Researcher Names:
+              </label>
+              <input
+                type="text"
+                id="researcherNames"
+                formControlName="researcherNames"
+                placeholder="E.g., John Smith; Jane Doe"
+                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Submit button with loading state -->
+          <div class="flex justify-center gap-4">
+            <button
+              type="submit"
+              [disabled]="matchLoading()"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            >
+              <span *ngIf="matchLoading()">
+                <svg
+                  class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Searching...
+              </span>
+              <span *ngIf="!matchLoading()">Search Matches</span>
+            </button>
+            <button
+              type="button"
+              (click)="resetMatchSearchForm()"
+              class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Match Results Table -->
+      <div class="max-w-9xl mx-auto mt-8">
+        <h2 class="text-xl font-semibold mb-4">Match search results</h2>
+
+        <!-- Loading spinner -->
+        <div *ngIf="matchLoading()" class="flex justify-center py-8">
+          <svg
+            class="animate-spin h-10 w-10 text-indigo-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+        </div>
+
+        <!-- Desktop Table View (hidden on small screens) -->
+        <div
+          *ngIf="!matchLoading() && matches().length > 0"
+          class="hidden md:block overflow-x-auto rounded-lg border border-gray-200 shadow-md"
+        >
+          <table
+            class="min-w-full divide-y divide-gray-200 table-fixed w-full max-w-full"
+          >
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  class="w-16 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Match ID
+                </th>
+                <th
+                  scope="col"
+                  class="w-16 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Score
+                </th>
+                <th
+                  scope="col"
+                  class="w-24 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell hidden"
+                >
+                  Date
+                </th>
+                <th
+                  scope="col"
+                  class="w-15 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Archived
+                </th>
+                <th
+                  scope="col"
+                  class="w-26 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell hidden"
+                >
+                  Researcher ID
+                </th>
+                <th
+                  scope="col"
+                  class="w-1/8 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Researcher
+                </th>
+                <th
+                  scope="col"
+                  class="w-16 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider lg:table-cell hidden"
+                >
+                  Grant ID
+                </th>
+                <th
+                  scope="col"
+                  class="w-1/8 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Grant Title
+                </th>
+                <th
+                  scope="col"
+                  class="w-70 px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider xl:table-cell hidden"
+                >
+                  Grant Source
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let match of matches()" class="hover:bg-gray-50">
+                <td class="px-2 sm:px-4 py-2 text-sm font-medium text-gray-900">
+                  {{ match.id }}
+                </td>
+                <td class="px-2 sm:px-4 py-2 text-sm text-gray-900">
+                  {{ match.score | number : "1.2-2" }}
+                </td>
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 lg:table-cell hidden"
+                >
+                  {{ match.matchedDate | date : "short" }}
+                </td>
+                <td class="px-2 sm:px-4 py-2 text-sm">
+                  <span
+                    [ngClass]="{
+                      'px-2 py-0.5 text-xs font-semibold rounded-full': true,
+                      'bg-red-100 text-red-800': match.isArchived,
+                      'bg-green-100 text-green-800': !match.isArchived
+                    }"
+                  >
+                    {{ match.isArchived ? "Yes" : "No" }}
+                  </span>
+                </td>
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 lg:table-cell hidden"
+                >
+                  {{ match.researcherId }}
+                </td>
+                <td class="px-2 sm:px-4 py-2 text-sm text-gray-900">
+                  <div class="truncate" [title]="match.researcherName">
+                    {{ match.researcherName }}
+                  </div>
+                </td>
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 lg:table-cell hidden"
+                >
+                  {{ match.grantId }}
+                </td>
+                <td class="px-2 sm:px-4 py-2 text-sm text-gray-900">
+                  <div class="line-clamp-2" [title]="match.grantTitle">
+                    {{ match.grantTitle }}
+                  </div>
+                </td>
+                <td
+                  class="px-2 sm:px-4 py-2 text-sm text-gray-500 xl:table-cell hidden"
+                >
+                  <div
+                    class="line-clamp-3 whitespace-normal"
+                    [title]="match.grantSource"
+                  >
+                    {{ match.grantSource }}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div
+          *ngIf="!matchLoading() && matches().length > 0"
+          class="md:hidden space-y-4"
+        >
+          <div
+            *ngFor="let match of matches()"
+            class="bg-white rounded-lg shadow border border-gray-200 p-4"
+          >
+            <div class="flex justify-between items-start">
+              <h3 class="font-medium text-gray-900">
+                {{ match.researcherName }}
+              </h3>
+              <span
+                [ngClass]="{
+                  'px-2 py-1 text-xs font-semibold rounded-full': true,
+                  'bg-red-100 text-red-800': match.isArchived,
+                  'bg-green-100 text-green-800': !match.isArchived
+                }"
+              >
+                {{ match.isArchived ? "Archived" : "Active" }}
+              </span>
+            </div>
+
+            <div class="mt-2">
+              <p class="text-sm text-gray-900 font-medium line-clamp-2">
+                {{ match.grantTitle }}
+              </p>
+              <p class="text-xs text-gray-500">{{ match.grantSource }}</p>
+            </div>
+
+            <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
+              <div>
+                <span class="text-gray-500">Match ID:</span>
+                <span class="font-medium ml-1">{{ match.id }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Score:</span>
+                <span class="font-medium ml-1">{{
+                  match.score | number : "1.2-2"
+                }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Date:</span>
+                <span class="font-medium ml-1">{{
+                  match.matchedDate | date : "short"
+                }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Researcher ID:</span>
+                <span class="font-medium ml-1">{{ match.researcherId }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Grant ID:</span>
+                <span class="font-medium ml-1">{{ match.grantId }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty state if no matches -->
+        <div
+          *ngIf="!matchLoading() && matches().length === 0 && !matchError()"
+          class="bg-white rounded-lg shadow-md border border-gray-200 p-6"
+        >
+          <div class="flex flex-col items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 text-gray-400 mb-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p class="text-center text-gray-500">
+              No matches found matching your filters.
+            </p>
+            <p class="mt-1 text-center text-gray-500">
+              Try adjusting your search criteria.
+            </p>
+          </div>
+        </div>
+
+        <!-- Error state -->
+        <div
+          *ngIf="matchError()"
+          class="bg-white rounded-lg shadow-md border border-red-200 p-6"
+        >
+          <div class="flex flex-col items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 text-red-400 mb-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p class="text-center text-red-500">
+              {{ matchError() }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="get-a-single-match" class="max-w-9xl mx-auto mb-8 mt-8">
+      <div class="bg-gray-50 rounded-lg border border-gray-200 p-4 mb-4">
+        <h2 class="text-xl font-semibold mb-2">Get a single match</h2>
+        <p class="text-gray-700 mb-2">
+          Retrieves detailed information about a specific match between a
+          researcher and grant using its unique identifier.
+        </p>
+        <div class="text-sm text-gray-600">
+          <p>
+            Endpoint: <span class="font-mono">GET /match/{{'{{id}}'}}</span>
+          </p>
+          <p>
+            Endpoint sample:
+            <a
+              href="https://api.research.profoundimpact.com/v1/match/216070"
+              class="text-indigo-600 hover:text-indigo-800"
+              target="_blank"
+              >https://api.research.profoundimpact.com/v1/match/216070</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Input for match ID and fetch button -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex items-end space-x-4">
+          <div class="flex-grow">
+            <label
+              for="matchId"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Match ID:</label
+            >
+            <input
+              type="number"
+              id="matchId"
+              #matchIdInput
+              placeholder="Enter match ID"
+              class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+          <button
+            (click)="getSingleMatch(matchIdInput.value)"
+            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            <span *ngIf="!singleMatchLoading()">Fetch Match</span>
+            <span *ngIf="singleMatchLoading()" class="flex items-center">
+              <svg
+                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Loading...
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Error message -->
+      <div
+        *ngIf="singleMatchError()"
+        class="bg-red-50 border-l-4 border-red-500 p-4 mb-6"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-red-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700">{{ singleMatchError() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Match details display -->
+      <div
+        *ngIf="singleMatch() && !singleMatchLoading()"
+        class="bg-white shadow overflow-hidden sm:rounded-lg mb-8"
+      >
+        <!-- Header -->
+        <div
+          class="px-4 py-5 sm:px-6 bg-indigo-50 flex justify-between items-center"
+        >
+          <div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+              Match #{{ singleMatch().id }}
+            </h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+              Matched: {{ singleMatch().matchedDate | date : "mediumDate" }}
+            </p>
+          </div>
+          <span
+            [ngClass]="{
+              'px-3 py-1 text-sm font-semibold rounded-full': true,
+              'bg-green-100 text-green-800': !singleMatch().isArchived,
+              'bg-red-100 text-red-800': singleMatch().isArchived
+            }"
+          >
+            {{ singleMatch().isArchived ? "Archived" : "Active" }}
+          </span>
+        </div>
+
+        <!-- Match Score -->
+        <div class="bg-white px-4 py-5 sm:px-6 border-b border-gray-200">
+          <div class="flex items-center">
+            <div class="text-2xl font-bold text-indigo-600">
+              {{ singleMatch().score }}%
+            </div>
+            <div class="ml-4">
+              <span class="text-sm font-medium text-gray-900">Match Score</span>
+              <p class="text-xs text-gray-500">
+                Based on keyword and research area similarity
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Researcher Information -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Researcher Information
+          </h3>
+        </div>
+        <div class="border-t border-gray-200">
+          <dl>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Researcher ID</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleMatch().researcher.id }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Name</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleMatch().researcher.name }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Faculty</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleMatch().researcher.faculty }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Program</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleMatch().researcher.program }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Role</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleMatch().researcher.role }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Organization</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleMatch().researcher.organization }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Grant Information -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Grant Information
+          </h3>
+        </div>
+        <div class="border-t border-gray-200">
+          <dl>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Grant ID</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleMatch().grant.id }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Title</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleMatch().grant.title }}
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Source</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ singleMatch().grant.source }}
+              </dd>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Website</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <a
+                  *ngIf="singleMatch().grant.url"
+                  [href]="singleMatch().grant.url"
+                  target="_blank"
+                  class="text-indigo-600 hover:text-indigo-900"
+                >
+                  {{ singleMatch().grant.url }}
+                </a>
+                <span *ngIf="!singleMatch().grant.url">Not available</span>
+              </dd>
+            </div>
+            <div
+              class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+            >
+              <dt class="text-sm font-medium text-gray-500">Funding</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="flex space-x-6">
+                  <div *ngIf="singleMatch().grant.budget">
+                    <span class="font-medium">Budget:</span>
+                    {{ singleMatch().grant.budget }}
+                  </div>
+                  <div *ngIf="singleMatch().grant.awardAmount">
+                    <span class="font-medium">Award Amount:</span>
+                    {{ singleMatch().grant.awardAmount }}
+                  </div>
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Deadlines Information -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Deadlines</h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+          <dl class="sm:divide-y sm:divide-gray-200">
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Deadline Info</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="flex space-x-6">
+                  <div>
+                    <span class="font-medium">Type:</span>
+                    {{ singleMatch().grant.deadlineType }}
+                  </div>
+                  <div>
+                    <span class="font-medium">Intake:</span>
+                    {{ singleMatch().grant.deadlineIntake }}
+                  </div>
+                  <div>
+                    <span class="font-medium">Stage:</span>
+                    {{ singleMatch().grant.deadlineStage }}
+                  </div>
+                  <div>
+                    <span class="font-medium">Status:</span>
+                    {{
+                      singleMatch().grant.isContinues ? "Continuous" : "Regular"
+                    }}
+                  </div>
+                </div>
+              </dd>
+            </div>
+
+            <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">
+                Application Deadlines
+              </dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div class="space-y-3">
+                  <div
+                    *ngFor="
+                      let deadline of singleMatch().grant.deadlines;
+                      let i = index
+                    "
+                    class="p-3 border border-gray-200 rounded-md"
+                  >
+                    <div class="font-medium">Deadline Set {{ i + 1 }}</div>
+                    <div class="mt-2 grid grid-cols-2 gap-4">
+                      <div>
+                        <span class="text-gray-500">Application Deadline:</span>
+                        <div class="font-medium">
+                          {{ deadline.applicationDeadline | date }}
+                        </div>
+                      </div>
+                      <div>
+                        <span class="text-gray-500"
+                          >Registration of Intent:</span
+                        >
+                        <div class="font-medium">
+                          {{ deadline.registrationOfIntentDeadline | date }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Areas of Research -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Areas of Research
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+          <div class="flex flex-wrap gap-2">
+            <span
+              *ngFor="let aor of singleMatch().AreaOfResearches"
+              class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+            >
+              {{ aor }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Disciplines -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Disciplines
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+          <div class="flex flex-wrap gap-2">
+            <span
+              *ngFor="let discipline of singleMatch().disciplines"
+              class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"
+            >
+              {{ discipline }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Keywords -->
+        <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Keyword Matches
+          </h3>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Researcher Keyword
+                </th>
+                <th
+                  scope="col"
+                  class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Grant Keyword
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let keyword of singleMatch().keywords">
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <div class="text-sm font-medium text-purple-700">
+                    {{ keyword.rk }}
+                  </div>
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <div class="text-sm font-medium text-indigo-700">
+                    {{ keyword.gk }}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

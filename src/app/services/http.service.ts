@@ -31,7 +31,7 @@ export class HttpService {
     // Make the POST request with auth headers
     return this.http.post(url, params, { headers }).pipe(
       map((response: any) => response),
-      catchError((error) => {
+      catchError((error: any) => {
         console.error('Error searching grants:', error);
         throw error;
       })
@@ -52,7 +52,7 @@ export class HttpService {
     });
 
     return this.http.get<T>(url, { params, headers }).pipe(
-      catchError((error) => {
+      catchError((error: any) => {
         console.error(`Error getting ${endpoint}:`, error);
         throw error;
       })
@@ -73,10 +73,21 @@ export class HttpService {
     });
 
     return this.http.post<T>(url, body, { headers }).pipe(
-      catchError((error) => {
+      catchError((error: any) => {
         console.error(`Error posting to ${endpoint}:`, error);
         throw error;
       })
     );
+  }
+
+  // Add a new method for uploading files
+  uploadFile(url: string, file: File): Observable<any> {
+    // For direct PUT to S3 or similar storage, we don't need to use JSON
+    // We send the file directly without additional headers
+    return this.http.put(url, file, {
+      headers: new HttpHeaders({
+        'Content-Type': file.type,
+      }),
+    });
   }
 }
