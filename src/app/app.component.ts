@@ -24,6 +24,23 @@ interface UploadUrlResponse {
   url: string;
 }
 
+interface Project {
+  id: number;
+  title: string;
+  public: boolean;
+  source: string;
+  status: string;
+  length: string;
+  websiteLink: string;
+  organization: string;
+  organizationUrl: string;
+  startDate: string;
+  endDate: string;
+  isContinuous: boolean;
+  location: string;
+  isArchived: boolean;
+}
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -45,6 +62,14 @@ export class AppComponent implements OnInit {
             'Get a single grant',
             'Add grant by parameters',
             'Add grant by PDF',
+          ],
+        },
+        {
+          title: 'Project endpoints',
+          subitems: [
+            'Search projects',
+            'Get a single project',
+            'Add project by parameters',
           ],
         },
         {
@@ -73,6 +98,7 @@ export class AppComponent implements OnInit {
 
   // Results signal
   grants = signal<any[]>([]);
+  projects = signal<Project[]>([]);
 
   // Loading state
   isLoading = signal(false);
@@ -174,6 +200,26 @@ export class AppComponent implements OnInit {
   showEducationSection = signal<boolean>(false);
   showPublicationsSection = signal<boolean>(false);
 
+  // Add this property declaration to the AppComponent class
+  // Place it with the other form declarations
+  projectSearchForm!: FormGroup;
+
+  // Add these signals to your AppComponent class
+  singleProject = signal<any>(null);
+  singleProjectLoading = signal<boolean>(false);
+  singleProjectError = signal<string | null>(null);
+
+  // Add these signals to your AppComponent class
+  addProjectLoading = signal(false);
+  addProjectSuccess = signal<any>(null);
+  addProjectError = signal<string | null>(null);
+
+  // Add this form declaration to the AppComponent class
+  addProjectForm!: FormGroup;
+
+  // Add this property to your AppComponent class
+  includeTriMatch = signal<boolean>(true);
+
   constructor(
     public httpService: HttpService,
     private zone: NgZone,
@@ -218,8 +264,42 @@ export class AppComponent implements OnInit {
       grantSources: [null],
       grantTitles: [null],
       researcherNames: [null],
+      projectIds: [null],
+      triMatch: [null],
+    });
+
+    // Initialize project search form
+    this.projectSearchForm = this.fb.group({
+      titles: [null],
+      organizations: [null],
+      keywords: [null],
+      areaOfResearches: [null],
+      disciplines: [null],
+    });
+
+    this.addProjectForm = this.fb.group({
+      public: [false],
+      title: [null, Validators.required],
+      websiteLink: [null],
+      scope: [null, Validators.required],
+      length: [null],
+      startYear: [null],
+      startMonth: [null, Validators.required],
+      startDay: [null, Validators.required],
+      endYear: [null],
+      endMonth: [null, Validators.required],
+      endDay: [null, Validators.required],
+      isContinuous: [false],
+      organization: [null],
+      organizationUrl: [null, Validators.required],
+      organizationLinkedinUrl: [null, Validators.required],
+      city: [null],
+      state: [null],
+      country: [null],
+      keywords: this.fb.array([this.fb.control(null)]),
     });
   }
+  hideProjectCol = false;
 
   ngOnInit() {
     // Call in ngOnInit instead of constructor
@@ -271,6 +351,37 @@ export class AppComponent implements OnInit {
           }
         }
       });
+    // Add subscription to watch isContinuous changes
+    this.addProjectForm.get('isContinuous')?.valueChanges.subscribe((value) => {
+      if (value === true) {
+        // If project is continuing, clear end date fields
+        this.addProjectForm.get('endYear')?.setValue(null);
+        this.addProjectForm.get('endMonth')?.setValue(null);
+        this.addProjectForm.get('endDay')?.setValue(null);
+
+        // Remove validators from end date fields
+        this.addProjectForm.get('endYear')?.clearValidators();
+        this.addProjectForm.get('endMonth')?.clearValidators();
+        this.addProjectForm.get('endDay')?.clearValidators();
+      } else {
+        // If project is not continuing, add required validators back
+        this.addProjectForm
+          .get('endYear')
+          ?.setValidators([Validators.required]);
+        this.addProjectForm
+          .get('endMonth')
+          ?.setValidators([Validators.required]);
+        this.addProjectForm.get('endDay')?.setValidators([Validators.required]);
+      }
+
+      // Important: Update validity after changing validators
+      this.addProjectForm.get('endYear')?.updateValueAndValidity();
+      this.addProjectForm.get('endMonth')?.updateValueAndValidity();
+      this.addProjectForm.get('endDay')?.updateValueAndValidity();
+
+      // Update the entire form validity
+      this.addProjectForm.updateValueAndValidity();
+    });
   }
 
   sanitizeResearcherIdsInput(event: Event): void {
@@ -386,22 +497,47 @@ export class AppComponent implements OnInit {
       ? { ...this.addGrantPdfForm.value }
       : { ...this.addGrantForm.value };
 
+    // Handle application deadlines specifically - this applies to both form types
+    if (formData.applicationDeadlines) {
+      // Filter out deadline objects where both values are null or empty
+      formData.applicationDeadlines = formData.applicationDeadlines.filter(
+        (deadline: any) => {
+          // Check if any value in the deadline object is non-empty
+          return Object.values(deadline).some(
+            (val) => val !== null && String(val).trim() !== ''
+          );
+        }
+      );
+
+      // If all deadlines were empty and we end up with an empty array,
+      // check if deadlineType is 'Continuous'
+      if (
+        formData.applicationDeadlines.length === 0 &&
+        formData.deadlineType === 'Continuous'
+      ) {
+        // For Continuous grants, it's valid to have no deadlines
+        // Keep the empty array
+      }
+    }
+
     if (isPdfForm) {
       // Handle PDF form arrays
       Object.keys(this.pdfFormArrays).forEach((key) => {
         const arrayKey = key as keyof typeof this.pdfFormArrays;
         if (formData[arrayKey]) {
-          formData[arrayKey] = formData[arrayKey].filter((item: any) => {
-            if (typeof item === 'string') {
-              return item.trim() !== '';
-            } else if (typeof item === 'object' && item !== null) {
-              // For applicationDeadlines which is an array of objects
-              return Object.values(item).some(
-                (val) => val && String(val).trim() !== ''
-              );
-            }
-            return false;
-          });
+          // Skip applicationDeadlines as we've already handled it above
+          if (arrayKey !== 'applicationDeadlines') {
+            formData[arrayKey] = formData[arrayKey].filter((item: any) => {
+              if (typeof item === 'string') {
+                return item.trim() !== '';
+              } else if (typeof item === 'object' && item !== null) {
+                return Object.values(item).some(
+                  (val) => val && String(val).trim() !== ''
+                );
+              }
+              return false;
+            });
+          }
         }
       });
     } else {
@@ -1266,9 +1402,21 @@ export class AppComponent implements OnInit {
             .map((n: string) => n.trim())
             .filter(Boolean)
         : [],
+      projectIds: formValues.projectIds
+        ? formValues.projectIds
+            .split(';')
+            .map((id: string) => parseInt(id.trim()))
+            .filter((id: number) => !isNaN(id))
+        : [],
     };
 
-    this.httpService.post('match/search', searchParams).subscribe({
+    // Determine the endpoint URL based on triMatch checkbox
+    const endpoint = formValues.triMatch
+      ? ((this.hideProjectCol = true), 'match/search?triMatch=true')
+      : ((this.hideProjectCol = false), 'match/search');
+
+    // Use the HttpService to make the POST request with the appropriate endpoint
+    this.httpService.post(endpoint, searchParams).subscribe({
       next: (result) => {
         this.zone.run(() => {
           // Update the matches signal with the new data
@@ -1276,6 +1424,8 @@ export class AppComponent implements OnInit {
 
           // Update loading state
           this.matchLoading.set(false);
+
+          // hide column project
         });
       },
       error: (error) => {
@@ -1294,6 +1444,9 @@ export class AppComponent implements OnInit {
               grantId: 0,
               grantTitle: 'Fallback Grant (API Error)',
               grantSource: 'Error Fallback Source',
+              projectId: 0,
+              projectTitle: 'Fallback Project (API Error)',
+              projectOrganization: 'Error Organization',
             },
           ]);
 
@@ -1316,19 +1469,17 @@ export class AppComponent implements OnInit {
     this.matchError.set(null);
   }
 
-  /**
-   * Get detailed information about a single match by ID
-   * @param id The unique identifier of the match
-   */
   getSingleMatch(id: number | string) {
     // Reset state
     this.singleMatchLoading.set(true);
     this.singleMatchError.set(null);
 
-    // Log the action
+    // Build the URL with the triMatch parameter based on checkbox state
+    const triMatchParam = this.includeTriMatch() ? 'true' : 'false';
+    const url = `match/${id}?triMatch=${triMatchParam}`;
 
-    // Use the get method from HttpService
-    this.httpService.get(`match/${id}`).subscribe({
+    // Use the get method from HttpService with the constructed URL
+    this.httpService.get(url).subscribe({
       next: (result: any) => {
         this.zone.run(() => {
           // Update the singleMatch signal with the new data
@@ -1355,6 +1506,11 @@ export class AppComponent implements OnInit {
         });
       },
     });
+  }
+
+  // Add this method to toggle the triMatch parameter
+  toggleTriMatch() {
+    this.includeTriMatch.update((value) => !value);
   }
 
   /**
@@ -1879,11 +2035,11 @@ export class AppComponent implements OnInit {
           exp.title.trim() !== ''
       );
 
-      // Clean null values from experience objects
+      // Clean null values and empty strings from experience objects
       formData.experience = formData.experience.map((exp: any) => {
         const cleanExp = { ...exp };
         Object.keys(cleanExp).forEach((key) => {
-          if (cleanExp[key] === null) {
+          if (cleanExp[key] === null || cleanExp[key] === '') {
             delete cleanExp[key];
           }
         });
@@ -1905,11 +2061,11 @@ export class AppComponent implements OnInit {
           edu.degree.trim() !== ''
       );
 
-      // Clean null values from education objects
+      // Clean null values and empty strings from education objects
       formData.education = formData.education.map((edu: any) => {
         const cleanEdu = { ...edu };
         Object.keys(cleanEdu).forEach((key) => {
-          if (cleanEdu[key] === null) {
+          if (cleanEdu[key] === null || cleanEdu[key] === '') {
             delete cleanEdu[key];
           }
         });
@@ -1929,11 +2085,11 @@ export class AppComponent implements OnInit {
         (pub: any) => pub.title && pub.title.trim() !== ''
       );
 
-      // Clean each publication object by removing null values
+      // Clean each publication object by removing null values and empty strings
       formData.publications = formData.publications.map((pub: any) => {
         const cleanPub = { ...pub };
         Object.keys(cleanPub).forEach((key) => {
-          if (cleanPub[key] === null) {
+          if (cleanPub[key] === null || cleanPub[key] === '') {
             delete cleanPub[key];
           }
         });
@@ -1952,10 +2108,10 @@ export class AppComponent implements OnInit {
       }
     }
 
-    // Clean null values from the basic object
+    // Clean null values AND empty strings from the basic object
     if (formData.basic) {
       Object.keys(formData.basic).forEach((key) => {
-        if (formData.basic[key] === null) {
+        if (formData.basic[key] === null || formData.basic[key] === '') {
           delete formData.basic[key];
         }
       });
@@ -2261,7 +2417,7 @@ export class AppComponent implements OnInit {
       basic: this.fb.group({
         title: [null],
         firstName: [null, Validators.required],
-        lastName: [null],
+        lastName: [null, Validators.required],
         email: [null],
         linkedinUrl: [null],
         country: [null],
@@ -2517,6 +2673,573 @@ export class AppComponent implements OnInit {
         pub.get('title')?.clearValidators();
       }
       pub.get('title')?.updateValueAndValidity();
+    }
+  }
+
+  // Add these methods to your class:
+
+  /**
+   * Search for projects using the provided filters
+   */
+  searchForProjects() {
+    // Set loading state
+    this.isLoading.set(true);
+
+    // Get form values and format them appropriately for the API
+    const formValues = this.projectSearchForm.value;
+
+    // Define search parameters from form values
+    // Convert semicolon-separated strings to arrays where needed
+    const searchParams = {
+      titles: formValues.titles
+        ? formValues.titles
+            .split(';')
+            .map((t: string) => t.trim())
+            .filter(Boolean)
+        : [],
+      organizations: formValues.organizations
+        ? formValues.organizations
+            .split(';')
+            .map((o: string) => o.trim())
+            .filter(Boolean)
+        : [],
+      keywords: formValues.keywords
+        ? formValues.keywords
+            .split(';')
+            .map((k: string) => k.trim())
+            .filter(Boolean)
+        : [],
+      areaOfResearches: formValues.areaOfResearches
+        ? formValues.areaOfResearches
+            .split(';')
+            .map((a: string) => a.trim())
+            .filter(Boolean)
+        : [],
+      disciplines: formValues.disciplines
+        ? formValues.disciplines
+            .split(';')
+            .map((d: string) => d.trim())
+            .filter(Boolean)
+        : [],
+    };
+
+    this.httpService.post('project/search', searchParams).subscribe({
+      next: (result) => {
+        this.zone.run(() => {
+          // Update the projects signal with the new data
+          this.projects.set(result as Project[]);
+
+          // Update loading state
+          this.isLoading.set(false);
+        });
+      },
+      error: (error) => {
+        this.zone.run(() => {
+          console.error('Error searching projects:', error);
+
+          // Set fallback data in case of error
+          this.projects.set([
+            {
+              id: 9999,
+              title: 'Fallback Project (API Error)',
+              public: true,
+              source: 'Error Fallback Source',
+              status: 'Error',
+              length: 'Unknown',
+              websiteLink: '',
+              organization: 'Error Organization',
+              organizationUrl: '',
+              startDate: '',
+              endDate: '',
+              isContinuous: false,
+              location: 'Unknown',
+              isArchived: false,
+            },
+          ]);
+
+          // Update loading state
+          this.isLoading.set(false);
+        });
+      },
+    });
+  }
+
+  /**
+   * Reset the project search form
+   */
+  resetProjectForm() {
+    // Use setTimeout to ensure this runs after current change detection cycle
+    setTimeout(() => {
+      this.zone.run(() => {
+        // Reset with null values
+        this.projectSearchForm.reset({
+          titles: null,
+          organizations: null,
+          keywords: null,
+          areaOfResearches: null,
+          disciplines: null,
+        });
+
+        // Clear the results (optional)
+        // this.projects.set([]);
+
+        // Force change detection
+        this.cdr.detectChanges();
+      });
+    }, 0);
+  }
+
+  /**
+   * Get detailed information about a single project by ID
+   * @param id The unique identifier of the project
+   */
+  getSingleProject(id: number | string) {
+    // Reset state
+    this.singleProjectLoading.set(true);
+    this.singleProjectError.set(null);
+
+    // Use the get method from HttpService
+    this.httpService.get(`project/${id}`).subscribe({
+      next: (result: any) => {
+        this.zone.run(() => {
+          // Update the singleProject signal with the new data
+          this.singleProject.set(result);
+
+          // Update loading state
+          this.singleProjectLoading.set(false);
+        });
+      },
+      error: (error) => {
+        this.zone.run(() => {
+          console.error(`Error fetching project with ID ${id}:`, error);
+
+          // Set error message
+          this.singleProjectError.set(
+            error.status === 404
+              ? `Project with ID ${id} not found`
+              : `Error loading project: ${error.message || 'Unknown error'}`
+          );
+
+          // Reset data and update loading state
+          this.singleProject.set(null);
+          this.singleProjectLoading.set(false);
+        });
+      },
+    });
+  }
+
+  // Modify the initAddProjectForm method to set up the form with proper validation
+  initAddProjectForm() {
+    this.addProjectForm = this.fb.group({
+      public: [false],
+      title: [null, [Validators.required]],
+      websiteLink: [null],
+      scope: [null, [Validators.required]],
+      length: [null],
+      startYear: [null, [Validators.required]],
+      startMonth: [null, [Validators.required]],
+      startDay: [null, [Validators.required]],
+      // For end date fields, don't set required validators initially
+      // We'll set them conditionally based on isContinuous
+      endYear: [null],
+      endMonth: [null],
+      endDay: [null],
+      isContinuous: [false],
+      organization: [null],
+      organizationUrl: [null],
+      organizationLinkedinUrl: [null],
+      city: [null],
+      state: [null],
+      country: [null],
+      keywords: this.fb.array([this.fb.control(null)]),
+    });
+
+    // Set validators based on initial isContinuous value
+    if (!this.addProjectForm.get('isContinuous')?.value) {
+      this.addProjectForm.get('endYear')?.setValidators([Validators.required]);
+      this.addProjectForm.get('endMonth')?.setValidators([Validators.required]);
+      this.addProjectForm.get('endDay')?.setValidators([Validators.required]);
+
+      this.addProjectForm.get('endYear')?.updateValueAndValidity();
+      this.addProjectForm.get('endMonth')?.updateValueAndValidity();
+      this.addProjectForm.get('endDay')?.updateValueAndValidity();
+    }
+  }
+  // Add a new method to update end date validators based on isContinuous value
+  updateEndDateValidators(isContinuing: boolean) {
+    const endYearControl = this.addProjectForm.get('endYear');
+    const endMonthControl = this.addProjectForm.get('endMonth');
+    const endDayControl = this.addProjectForm.get('endDay');
+
+    if (isContinuing) {
+      // If project is continuing, remove all validators from end date fields
+      endYearControl?.clearValidators();
+      endMonthControl?.clearValidators();
+      endDayControl?.clearValidators();
+
+      // Disable the end year field
+      endYearControl?.disable();
+
+      // Clear all end date values
+      endYearControl?.setValue(null);
+      endMonthControl?.setValue(null);
+      endDayControl?.setValue(null);
+    } else {
+      // If project has a specific end date, add required validators to all end date fields
+      endYearControl?.enable();
+      endYearControl?.setValidators([Validators.required]);
+      endMonthControl?.setValidators([Validators.required]);
+      endDayControl?.setValidators([Validators.required]);
+    }
+
+    // Update validity after changing validators
+    endYearControl?.updateValueAndValidity();
+    endMonthControl?.updateValueAndValidity();
+    endDayControl?.updateValueAndValidity();
+
+    // Update the entire form validity
+    this.addProjectForm.updateValueAndValidity();
+  }
+
+  /**
+   * Adds a new project to the system by providing structured parameters
+   * This triggers the AI stack and Area of Research(AOR) attachment
+   * Note: AI processing takes approximately 10 minutes to complete
+   */
+  addProjectByParameters() {
+    // Mark all fields as touched to trigger validation messages
+    this.markFormGroupTouched(this.addProjectForm);
+
+    // Check if form is valid
+    if (this.addProjectForm.invalid) {
+      console.error('Project form is invalid:', this.addProjectForm.errors);
+      console.log('Form values:', this.addProjectForm.value);
+      console.log('Form status:', this.addProjectForm.status);
+
+      // Log specific control statuses to help debug
+      console.log('Title valid:', this.addProjectForm.get('title')?.valid);
+      console.log('Summary valid:', this.addProjectForm.get('summary')?.valid);
+      console.log(
+        'Start date valid:',
+        this.addProjectForm.get('startYear')?.valid &&
+          this.addProjectForm.get('startMonth')?.valid &&
+          this.addProjectForm.get('startDay')?.valid
+      );
+      console.log(
+        'isContinuous:',
+        this.addProjectForm.get('isContinuous')?.value
+      );
+      console.log(
+        'End date fields valid:',
+        this.addProjectForm.get('endYear')?.valid,
+        this.addProjectForm.get('endMonth')?.valid,
+        this.addProjectForm.get('endDay')?.valid
+      );
+
+      // Get specific validation errors to show a more helpful message
+      const errorFields = [];
+
+      if (this.addProjectForm.get('title')?.invalid) {
+        errorFields.push('Title');
+      }
+      if (this.addProjectForm.get('summary')?.invalid) {
+        errorFields.push('Summary');
+      }
+      if (
+        this.addProjectForm.get('startYear')?.invalid ||
+        this.addProjectForm.get('startMonth')?.invalid ||
+        this.addProjectForm.get('startDay')?.invalid
+      ) {
+        errorFields.push('Start Date');
+      }
+
+      // For end date, only check if isContinuous is false
+      const isContinuing = this.addProjectForm.get('isContinuous')?.value;
+      if (!isContinuing) {
+        // When not ongoing, check all end date fields
+        if (
+          this.addProjectForm.get('endYear')?.invalid ||
+          this.addProjectForm.get('endMonth')?.invalid ||
+          this.addProjectForm.get('endDay')?.invalid
+        ) {
+          errorFields.push('End Date');
+        }
+      }
+
+      // Set a more specific error message
+      if (errorFields.length > 0) {
+        this.addProjectError.set(
+          `Please fill in all required fields: ${errorFields.join(', ')}`
+        );
+      } else {
+        this.addProjectError.set(
+          'Please fill in all required fields correctly'
+        );
+      }
+      return;
+    }
+
+    // Reset state
+    this.addProjectLoading.set(true);
+    this.addProjectSuccess.set(null);
+    this.addProjectError.set(null);
+
+    // Prepare the form data
+    const payload = this.prepareProjectFormData();
+    console.log('Submitting payload:', payload);
+
+    // Use the HttpService to make the POST request
+    this.httpService.post('project', payload).subscribe({
+      next: (result) => {
+        this.zone.run(() => {
+          console.log('Project added successfully:', result);
+          // Update success signal with the result data
+          this.addProjectSuccess.set(result);
+
+          // Update loading state
+          this.addProjectLoading.set(false);
+
+          // Don't reset the form immediately - let the user see the success message
+          setTimeout(() => {
+            this.resetAddProjectForm(false); // Pass false to not clear success message
+          }, 5000); // Wait 5 seconds before resetting the form
+        });
+      },
+      error: (error) => {
+        this.zone.run(() => {
+          console.error('Error adding project:', error);
+
+          // Set error message
+          this.addProjectError.set(
+            `Failed to add project: ${error.error?.message || 'Unknown error'}`
+          );
+
+          // Update loading state
+          this.addProjectLoading.set(false);
+        });
+      },
+    });
+  }
+
+  /**
+   * Helper method to prepare project form data by removing empty array items
+   */
+  prepareProjectFormData() {
+    // Get both regular and disabled controls
+    const formData = {
+      ...this.addProjectForm.getRawValue(), // This gets values from both enabled and disabled controls
+    };
+
+    // If project is ongoing, ensure end date fields are not included
+    if (formData.isContinuous === true) {
+      delete formData.endYear;
+      delete formData.endMonth;
+      delete formData.endDay;
+    }
+
+    // Filter out null values and empty arrays
+    const result: Record<string, any> = {};
+
+    Object.entries(formData).forEach(([key, value]) => {
+      // Skip null values
+      if (value === null) {
+        return;
+      }
+
+      // Handle keywords array specially
+      if (key === 'keywords' && Array.isArray(value)) {
+        // Filter out empty keywords
+        const filteredKeywords = value.filter(
+          (keyword) => keyword && keyword.trim() !== ''
+        );
+
+        // Only add keywords if there are any non-empty ones
+        if (filteredKeywords.length > 0) {
+          result[key] = filteredKeywords;
+        }
+        return;
+      }
+
+      // Add all other non-null values
+      result[key] = value;
+    });
+
+    return result;
+  }
+
+  /**
+   * Reset the project form to its initial state
+   */
+  resetAddProjectForm(resetMessages = true) {
+    // Clear the form
+    this.addProjectForm.reset({
+      public: false,
+      isContinuous: false,
+    });
+
+    // Only reset success/error states if specified
+    if (resetMessages) {
+      this.addProjectSuccess.set(null);
+      this.addProjectError.set(null);
+    }
+
+    // Reset keywords array to initial state with just one empty entry
+    const keywordsArray = this.addProjectForm.get('keywords') as FormArray;
+    while (keywordsArray.length > 0) {
+      keywordsArray.removeAt(0);
+    }
+    keywordsArray.push(this.fb.control(null));
+
+    // Reset validators for end date fields based on isContinuous value
+    this.updateEndDateValidators(
+      this.addProjectForm.get('isContinuous')?.value
+    );
+  }
+
+  // Add these getter methods to access the form arrays
+  get projectKeywordsArray(): FormArray {
+    return this.addProjectForm.get('keywords') as FormArray;
+  }
+
+  // Add methods to add/remove items from the keywords array
+  addProjectKeyword() {
+    this.projectKeywordsArray.push(this.fb.control(null));
+  }
+
+  removeProjectKeyword(index: number) {
+    if (this.projectKeywordsArray.length > 1) {
+      this.projectKeywordsArray.removeAt(index);
+    }
+  }
+
+  /**
+   * Update the project start date fields when the date input changes
+   * @param event The change event
+   */
+  updateProjectStartDate(event: Event): void {
+    const dateValue = (event.target as HTMLInputElement).value;
+
+    if (dateValue) {
+      // Create date object at noon to avoid timezone issues
+      const date = new Date(`${dateValue}T12:00:00`);
+
+      // Extract date components in local timezone
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // JavaScript months are 0-indexed
+      const day = date.getDate();
+
+      // Update form controls
+      this.addProjectForm.patchValue({
+        startYear: year,
+        startMonth: month,
+        startDay: day,
+      });
+
+      console.log(`Start date set to: ${year}-${month}-${day}`);
+    } else {
+      // If date is cleared, reset all fields
+      this.addProjectForm.patchValue({
+        startYear: null,
+        startMonth: null,
+        startDay: null,
+      });
+    }
+  }
+
+  /**
+   * Update the project end date fields when the date input changes
+   * @param event The change event
+   */
+  updateProjectEndDate(event: Event): void {
+    const dateValue = (event.target as HTMLInputElement).value;
+
+    if (dateValue) {
+      // Create date object at noon to avoid timezone issues
+      const date = new Date(`${dateValue}T12:00:00`);
+
+      // Extract date components in local timezone
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // JavaScript months are 0-indexed
+      const day = date.getDate();
+
+      // Update form controls
+      this.addProjectForm.patchValue({
+        endYear: year,
+        endMonth: month,
+        endDay: day,
+      });
+
+      console.log(`End date set to: ${year}-${month}-${day}`);
+    } else {
+      // If date is cleared, reset all fields
+      this.addProjectForm.patchValue({
+        endYear: null,
+        endMonth: null,
+        endDay: null,
+      });
+    }
+  }
+
+  /**
+   * Format the date components into a string for the date input
+   * @param year The year value
+   * @param month The month value (1-12)
+   * @param day The day value
+   * @returns A date string in YYYY-MM-DD format
+   */
+  formatProjectDate(
+    year: number | null,
+    month: number | null,
+    day: number | null
+  ): string {
+    if (!year || !month || !day) {
+      return '';
+    }
+
+    // Format month and day to ensure they have two digits
+    const formattedMonth = month.toString().padStart(2, '0');
+    const formattedDay = day.toString().padStart(2, '0');
+
+    return `${year}-${formattedMonth}-${formattedDay}`;
+  }
+  onDeadlineTypeChange() {
+    const deadlineTypeControl = this.addGrantForm.get('deadlineType');
+
+    if (!deadlineTypeControl) {
+      return; // Exit if the control doesn't exist
+    }
+
+    const deadlineType = deadlineTypeControl.value;
+
+    if (deadlineType === 'Continuous') {
+      // Clear all application deadlines when continuous is selected
+      const deadlinesArray = this.addGrantForm.get(
+        'applicationDeadlines'
+      ) as FormArray;
+
+      if (!deadlinesArray) {
+        return; // Exit if the form array doesn't exist
+      }
+
+      // Loop through all deadline sets and clear their values
+      for (let i = 0; i < deadlinesArray.length; i++) {
+        const deadlineGroup = deadlinesArray.at(i) as FormGroup;
+
+        // Add null checks for each control
+        const applicationDeadlineControl = deadlineGroup.get(
+          'applicationDeadline'
+        );
+        if (applicationDeadlineControl) {
+          applicationDeadlineControl.setValue(null);
+        }
+
+        const registrationDeadlineControl = deadlineGroup.get(
+          'registrationOfIntentDeadline'
+        );
+        if (registrationDeadlineControl) {
+          registrationDeadlineControl.setValue(null);
+        }
+      }
     }
   }
 }

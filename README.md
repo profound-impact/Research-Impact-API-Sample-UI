@@ -65,3 +65,5 @@ For running the code locally, run:
 ```bash
 ng s -o
 ```
+
+ng build && explorer dist\my-angular19-app

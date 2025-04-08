@@ -31,7 +31,7 @@ export class HttpService {
     // Make the POST request with auth headers
     return this.http.post(url, params, { headers }).pipe(
       map((response: any) => response),
-      catchError((error: any) => {
+      catchError((error) => {
         console.error('Error searching grants:', error);
         throw error;
       })
@@ -52,7 +52,7 @@ export class HttpService {
     });
 
     return this.http.get<T>(url, { params, headers }).pipe(
-      catchError((error: any) => {
+      catchError((error) => {
         console.error(`Error getting ${endpoint}:`, error);
         throw error;
       })
@@ -73,7 +73,7 @@ export class HttpService {
     });
 
     return this.http.post<T>(url, body, { headers }).pipe(
-      catchError((error: any) => {
+      catchError((error) => {
         console.error(`Error posting to ${endpoint}:`, error);
         throw error;
       })
